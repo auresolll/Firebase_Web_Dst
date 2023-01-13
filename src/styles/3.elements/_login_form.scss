@@ -1,0 +1,164 @@
+.form_login {
+	border: 1px solid $border-color;
+	margin: 2em 0;
+	transition: 0.5s;
+}
+
+.form_content {
+	display: flex;
+	align-items: flex-start;
+	gap: 2em;
+	flex-direction: column;
+	justify-content: flex-start;
+	margin: 2.5em;
+	h3 {
+		font-size: 1.1em;
+		font-weight: 700;
+	}
+}
+
+.input-group {
+	color: $paragraph-color;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3em;
+	margin-top: 1.5em;
+	.label-input {
+		color: $black;
+		border: none;
+		padding: 0 0.5em;
+		font-weight: 500;
+		font-size: 0.9em;
+	}
+	.input-form {
+		outline: none;
+		padding: 0.5em;
+		border: 1px solid #c5c5c5 !important;
+	}
+}
+
+.auth-wrapper {
+	display: grid;
+	grid-template-columns: 2fr 1fr 2fr;
+	width: 100%;
+	margin: 0 auto;
+
+	.auth {
+		&-action {
+			display: flex;
+			align-items: center;
+			flex-direction: row;
+			justify-content: space-between;
+		}
+
+		&-field {
+			color: #696868;
+			border: none;
+			padding: 0 0.5em;
+			font-weight: 500;
+			font-size: 0.8em;
+
+			&:last-child {
+				text-decoration: underline;
+			}
+		}
+
+		&-divider {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			margin: 0 1.8rem;
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				height: 30%;
+				width: 1px;
+				background: #e1e1e1;
+			}
+
+			&::after {
+				content: "";
+				bottom: 0;
+				position: absolute;
+				height: 30%;
+				width: 1px;
+				background: #e1e1e1;
+			}
+
+			h6 {
+				background: #f9f9f9;
+				padding: 1.2rem;
+				font-size: 0.8em;
+			}
+		}
+
+		&-button {
+			padding: 1em 2em;
+			background-color: $black;
+			border: 0;
+			text-decoration: none;
+			color: $white;
+			cursor: pointer;
+		}
+
+		&-social {
+			justify-content: flex-start !important;
+			align-items: flex-start !important;
+			gap: 2em;
+		}
+
+		&-item {
+			width: 300px;
+			height: 50px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: $white;
+			cursor: pointer;
+			gap: 0.5em;
+
+			&-facebook {
+				background-color: #0078ff;
+			}
+			&-google {
+				background-color: $white;
+				color: $black;
+			}
+			&-github {
+				background-color: $black;
+			}
+		}
+	}
+}
+
+.auth-forget {
+	justify-content: center;
+	height: 3.5em;
+	width: 100%;
+	gap: 1em;
+	background-color: $gray-20;
+	color: $black;
+
+	button {
+		color: $white;
+		padding: 1em 2em;
+		background-color: $black;
+		border: 0;
+	}
+}
+
+@include laptop {
+	.auth-wrapper {
+		grid-template-columns: 1fr;
+		grid-template-rows: 2fr 1fr 2fr !important;
+
+		.auth-social {
+			margin-top: 1.5em;
+			justify-content: flex-start !important;
+			align-items: center !important;
+		}
+	}
+}

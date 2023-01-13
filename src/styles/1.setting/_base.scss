@@ -1,0 +1,26 @@
+.container {
+	padding: 1.875em 10.375em;
+	background-color: $background-color;
+}
+
+.active {
+	padding-bottom: 0.2em;
+	border-bottom: 2px solid $black;
+}
+
+.close_menu {
+	left: -70em !important;
+	transition: 0.5s;
+}
+
+.flex-col {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.flex-row {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+}
