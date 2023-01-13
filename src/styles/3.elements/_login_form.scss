@@ -1,6 +1,9 @@
 .form_login {
+	max-width: 800px;
+	min-width: min-content;
+	margin: 0 auto;
 	border: 1px solid $border-color;
-	margin: 2em 0;
+	margin: 5em auto;
 	transition: 0.5s;
 }
 
@@ -105,13 +108,14 @@
 		}
 
 		&-social {
-			justify-content: flex-start !important;
-			align-items: flex-start !important;
+			justify-content: center;
+			align-items: center;
 			gap: 2em;
 		}
 
 		&-item {
-			width: 300px;
+			max-width: 280px;
+			min-width: 220px;
 			height: 50px;
 			display: flex;
 			align-items: center;
@@ -150,15 +154,18 @@
 	}
 }
 
-@include laptop {
+@include tablet {
 	.auth-wrapper {
-		grid-template-columns: 1fr;
-		grid-template-rows: 2fr 1fr 2fr !important;
+		display: block;
+	}
+}
 
-		.auth-social {
-			margin-top: 1.5em;
-			justify-content: flex-start !important;
-			align-items: center !important;
-		}
+@include mobile {
+	.auth-wrapper,
+	.auth-forget {
+		font-size: 14px;
+	}
+	.auth-button {
+		padding: 0.8em 1.5em !important;
 	}
 }

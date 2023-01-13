@@ -1,0 +1,14 @@
+.toast {
+	position: absolute;
+	top: 120px;
+	right: 167px;
+	max-width: 300px;
+	max-width: 300px;
+	padding: 0.5em 1em;
+	background-color: $red;
+	&-msg {
+		color: $white;
+		font-weight: 600;
+		line-height: 19px;
+	}
+}

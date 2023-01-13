@@ -19,6 +19,7 @@ const useAuth = () => {
 		authInstance
 			.signIn(email, password)
 			.then((cb: UserCredential) => {
+				cb.user.uid && navigate(HOME);
 				dispatch({
 					type: ActionType.AddCustomer,
 					payload: {
@@ -31,7 +32,6 @@ const useAuth = () => {
 						uid: cb.user.uid,
 					},
 				});
-				cb.user.uid && navigate(HOME);
 				return displayActionMessage(Status.signIn, SUCCESS);
 			})
 			.catch((error: any) => {

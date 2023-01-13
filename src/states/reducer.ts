@@ -3,10 +3,10 @@ import { StoreState } from "./state";
 
 export function storeReducer(state: StoreState, action: StoreActions): StoreState {
 	switch (action.type) {
-		case ActionType.CreateCustomer:
+		case ActionType.AddCustomer:
 			return {
 				...state,
-				newCustomer: action.payload,
+				customer: action.payload,
 			};
 		default:
 			return state;

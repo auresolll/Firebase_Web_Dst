@@ -5,7 +5,11 @@ interface IFeatureProps {}
 const Home: React.FunctionComponent<IFeatureProps> = (props) => {
 	return (
 		<>
-			<h1>Home</h1>
+			<main className="main">
+				<div>
+					<img src="./../../images/BANNER.png" width="100%" height="100%" alt="" />
+				</div>
+			</main>
 		</>
 	);
 };

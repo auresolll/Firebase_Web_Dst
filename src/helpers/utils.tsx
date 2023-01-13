@@ -23,5 +23,5 @@ export const displayActionMessage = (msg: string, status = "info") => {
 		} catch (e) {
 			console.log(e);
 		}
-	}, 3000);
+	}, 5000);
 };
