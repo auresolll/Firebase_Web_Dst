@@ -2,6 +2,7 @@ import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { CONTACT, FEATURE, HOME, PRODUCT, SIGNIN } from "../constants/router";
+import { useStore } from "../states/context";
 
 interface IHeaderProps {}
 const ROUTES = [
@@ -24,10 +25,13 @@ const ROUTES = [
 ];
 const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 	const [isToggle, setIsToggle] = React.useState<boolean>(false);
+	const [isDropMenu, setIsDropMenu] = React.useState<boolean>(false);
 	const activeStyle = {
 		paddingBottom: "0.2em",
 		borderBottom: "2px solid $black",
 	};
+	const { state, dispatch } = useStore();
+	console.log(state.customer);
 
 	return (
 		<>
@@ -62,11 +66,15 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 					<span className="shopping_icon toggle_icon">
 						<i className="ri-shopping-bag-line"></i>
 					</span>
-					<span className="profile_icon toggle_icon">
-						<Link to={SIGNIN}>
-							<i className="ri-user-3-line"></i>
-						</Link>
-					</span>
+					{state.customer.uid ? (
+						<></>
+					) : (
+						<span className="profile_icon toggle_icon">
+							<Link to={SIGNIN}>
+								<i className="ri-user-3-line"></i>
+							</Link>
+						</span>
+					)}
 				</div>
 			</header>
 		</>

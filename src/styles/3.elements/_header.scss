@@ -50,6 +50,14 @@
 		cursor: pointer;
 	}
 
+	.user_icon {
+		border: 1px solid $black;
+		border-radius: 100%;
+		padding: 0.5em;
+		width: 24px;
+		height: 24px;
+	}
+
 	&_active {
 		display: none;
 	}
@@ -60,6 +68,7 @@
 		color: $white !important;
 	}
 }
+
 @include laptop {
 	.header {
 		gap: 3.5em;

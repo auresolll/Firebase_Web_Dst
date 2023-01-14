@@ -26,7 +26,7 @@ const useAuth = () => {
 						displayName: cb.user.displayName,
 						email: cb.user.email,
 						phoneNumber: cb.user.phoneNumber,
-						photoURL: cb.user.photoURL,
+						photoURL: cb.user.photoURL as string | undefined,
 						providerId: cb.user.providerId,
 						status: Status.signIn,
 						uid: cb.user.uid,
@@ -38,8 +38,19 @@ const useAuth = () => {
 				// When a consumer doesn't have an account, create one
 				if (String(error.message) === AUTH_WRONG_USER) {
 					authInstance.createAccount(email, password);
-					return authInstance.onAuthStateChanged().then((cb: unknown) => {
-						console.log(cb);
+					return authInstance.onAuthStateChanged().then((cb: any) => {
+						dispatch({
+							type: ActionType.AddCustomer,
+							payload: {
+								displayName: cb.user.displayName,
+								email: cb.user.email,
+								phoneNumber: cb.user.phoneNumber,
+								photoURL: cb.user.photoURL as string | undefined,
+								providerId: cb.user.providerId,
+								status: Status.signIn,
+								uid: cb.user.uid,
+							},
+						});
 						navigate(HOME);
 						return displayActionMessage(Status.newAccount, SUCCESS);
 					});
@@ -49,6 +60,7 @@ const useAuth = () => {
 	};
 
 	return {
+		authInstance,
 		state,
 		handleAuthLocal,
 	};

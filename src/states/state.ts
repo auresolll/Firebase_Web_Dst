@@ -11,7 +11,7 @@ export interface Customer {
 	displayName: string | null;
 	email: string | null;
 	phoneNumber: string | null;
-	photoURL: string | null;
+	photoURL: string | undefined;
 	providerId: string;
 	uid: string;
 	status: Status;

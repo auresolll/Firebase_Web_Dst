@@ -107,8 +107,9 @@ section {
 }
 body {
 	line-height: 1;
-	font-family: "Tajawal", "Helvetica", sans-serif !important;
+	font-family: "DM Sans", sans-serif;
 	position: relative;
+	background-color: $background-color;
 }
 ol,
 ul {
