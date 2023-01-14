@@ -2,6 +2,7 @@ import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { CONTACT, FEATURE, HOME, PRODUCT, SIGNIN } from "../constants/router";
+import useAuth from "../hooks/useAuth";
 import { useStore } from "../states/context";
 
 interface IHeaderProps {}
@@ -31,6 +32,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 		borderBottom: "2px solid $black",
 	};
 	const { state, dispatch } = useStore();
+	const { handleSignOut } = useAuth();
 	console.log(state.customer);
 
 	return (
@@ -67,13 +69,51 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 						<i className="ri-shopping-bag-line"></i>
 					</span>
 					{state.customer.uid ? (
-						<></>
+						<>
+							<div className="toggle_customer">
+								<div
+									className="toggle_customer_main_img"
+									onClick={() => setIsDropMenu(!isDropMenu)}
+								>
+									{state.customer.photoURL ? (
+										<img src={state.customer.photoURL} className="toggle_icon" alt="" />
+									) : (
+										<i className="ri-user-4-line"></i>
+									)}
+								</div>
+								<div className={`toggle_customer_drop ${isDropMenu && "active_drop"}`}>
+									<div className="toggle_customer_drop_content">
+										<p className=" flex-row">
+											<i className="ri-mail-check-line"></i>
+											{state.customer.email}
+										</p>
+										<p className=" flex-row">
+											<i className="ri-bubble-chart-line"></i>
+											{state.customer.status}
+										</p>
+										{state.customer.displayName ||
+											(state.customer.phoneNumber && (
+												<p>{state.customer.displayName || state.customer.phoneNumber}</p>
+											))}
+										<p className=" flex-row">
+											<i className="ri-profile-line"></i>
+											Profile Setting
+										</p>
+
+										<p className=" flex-row" onClick={handleSignOut}>
+											<i className="ri-logout-circle-r-line "></i>
+											Sign Out
+										</p>
+									</div>
+								</div>
+							</div>
+						</>
 					) : (
-						<span className="profile_icon toggle_icon">
-							<Link to={SIGNIN}>
-								<i className="ri-user-3-line"></i>
-							</Link>
-						</span>
+						<Link to={SIGNIN}>
+							<span className="profile_icon toggle_icon">
+								<i className="ri-login-circle-line"></i>
+							</span>
+						</Link>
 					)}
 				</div>
 			</header>

@@ -15,6 +15,21 @@ const useAuth = () => {
 	const navigate = useNavigate();
 	const { state, dispatch } = useStore();
 
+	const handleSignOut = () => {
+		authInstance.signOut();
+		dispatch({
+			type: ActionType.AddCustomer,
+			payload: {
+				displayName: "",
+				phoneNumber: "",
+				email: "",
+				photoURL: "",
+				providerId: "",
+				status: Status.newAccount,
+				uid: "",
+			},
+		});
+	};
 	const handleAuthLocal = (email: string, password: string): void => {
 		authInstance
 			.signIn(email, password)
@@ -63,6 +78,7 @@ const useAuth = () => {
 		authInstance,
 		state,
 		handleAuthLocal,
+		handleSignOut,
 	};
 };
 

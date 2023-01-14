@@ -1,14 +1,10 @@
 // SETTING
-
+@import "./2.function/mixins";
 @import "./1.setting/colors";
 @import "./1.setting/reset";
-@import "./1.setting/base";
 @import "./1.setting/breakpoints";
 @import "./1.setting/zindex";
-
-// FUNCTION
-
-@import "./2.function/mixins";
+@import "./1.setting/base";
 
 //ELEMENTS
 @import "./3.elements/header";
