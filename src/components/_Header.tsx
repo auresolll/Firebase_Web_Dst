@@ -31,8 +31,9 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 		paddingBottom: "0.2em",
 		borderBottom: "2px solid $black",
 	};
-	const { state, dispatch } = useStore();
+	const { state } = useStore();
 	const { handleSignOut } = useAuth();
+
 	console.log(state.customer);
 
 	return (

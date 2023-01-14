@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { error } from "console";
 import { UserCredential } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { AUTH_WRONG_USER } from "../constants/errors";
@@ -17,17 +18,20 @@ const useAuth = () => {
 
 	const handleSignOut = () => {
 		authInstance.signOut();
-		dispatch({
-			type: ActionType.AddCustomer,
-			payload: {
-				displayName: "",
-				phoneNumber: "",
-				email: "",
-				photoURL: "",
-				providerId: "",
-				status: Status.newAccount,
-				uid: "",
-			},
+		return authInstance.onAuthStateChanged().catch((error) => {
+			dispatch({
+				type: ActionType.AddCustomer,
+				payload: {
+					displayName: "",
+					email: "",
+					phoneNumber: "",
+					photoURL: "",
+					providerId: "",
+					status: Status.signOut,
+					uid: "",
+				},
+			});
+			return displayActionMessage(Status.signOut, SUCCESS);
 		});
 	};
 	const handleAuthLocal = (email: string, password: string): void => {
@@ -35,18 +39,6 @@ const useAuth = () => {
 			.signIn(email, password)
 			.then((cb: UserCredential) => {
 				cb.user.uid && navigate(HOME);
-				dispatch({
-					type: ActionType.AddCustomer,
-					payload: {
-						displayName: cb.user.displayName,
-						email: cb.user.email,
-						phoneNumber: cb.user.phoneNumber,
-						photoURL: cb.user.photoURL as string | undefined,
-						providerId: cb.user.providerId,
-						status: Status.signIn,
-						uid: cb.user.uid,
-					},
-				});
 				return displayActionMessage(Status.signIn, SUCCESS);
 			})
 			.catch((error: any) => {
@@ -54,18 +46,6 @@ const useAuth = () => {
 				if (String(error.message) === AUTH_WRONG_USER) {
 					authInstance.createAccount(email, password);
 					return authInstance.onAuthStateChanged().then((cb: any) => {
-						dispatch({
-							type: ActionType.AddCustomer,
-							payload: {
-								displayName: cb.user.displayName,
-								email: cb.user.email,
-								phoneNumber: cb.user.phoneNumber,
-								photoURL: cb.user.photoURL as string | undefined,
-								providerId: cb.user.providerId,
-								status: Status.signIn,
-								uid: cb.user.uid,
-							},
-						});
 						navigate(HOME);
 						return displayActionMessage(Status.newAccount, SUCCESS);
 					});

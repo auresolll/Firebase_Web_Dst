@@ -29,7 +29,7 @@ function App() {
 				},
 			});
 		});
-	}, []);
+	}, [isAuth]);
 	return (
 		<StoreContext.Provider value={{ state, dispatch }}>
 			<div className="container">

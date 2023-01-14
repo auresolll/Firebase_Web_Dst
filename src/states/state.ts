@@ -5,6 +5,7 @@ export interface StoreState {
 export enum Status {
 	newAccount = "New Account",
 	signIn = "Account Sign In",
+	signOut = "Sign Out success",
 }
 
 export interface Customer {
