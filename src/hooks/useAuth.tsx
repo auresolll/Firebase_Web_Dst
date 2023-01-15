@@ -46,6 +46,18 @@ const useAuth = () => {
 				if (String(error.message) === AUTH_WRONG_USER) {
 					authInstance.createAccount(email, password);
 					return authInstance.onAuthStateChanged().then((cb: any) => {
+						dispatch({
+							type: ActionType.AddCustomer,
+							payload: {
+								displayName: cb.displayName,
+								email: cb.email,
+								phoneNumber: cb.phoneNumber,
+								photoURL: cb.photoURL as string | undefined,
+								providerId: cb.providerId,
+								status: Status.signIn,
+								uid: cb.uid,
+							},
+						});
 						navigate(HOME);
 						return displayActionMessage(Status.newAccount, SUCCESS);
 					});

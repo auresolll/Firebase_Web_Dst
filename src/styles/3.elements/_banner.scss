@@ -1,0 +1,74 @@
+.section {
+	.banner_section {
+		display: flex;
+		justify-content: space-around;
+		gap: 2em;
+		align-items: center;
+
+		.banner_content {
+			&_title {
+				margin-top: 1.5em;
+				font-size: 2.5rem;
+				font-weight: 700;
+			}
+
+			&_desc {
+				max-width: 450px;
+				margin: 1.5em 0;
+				color: $paragraph-color;
+			}
+
+			&_price {
+				font-weight: 600;
+				margin: 1.5em 0;
+			}
+
+			button {
+				border: 0;
+				padding: 1rem 1.5rem;
+				color: $title-color;
+				background-color: hsl(0, 0%, 75%);
+				font-size: 1em;
+				font-weight: 600;
+			}
+
+			button:last-child {
+				background-color: hsl(0, 0%, 17%);
+				color: $white;
+				padding: 1.2rem 1.5rem;
+			}
+		}
+
+		.banner_logo {
+			img {
+				border-radius: 100%;
+				width: 450px;
+				height: 450px;
+				display: block;
+				margin: 0 auto;
+				object-fit: cover;
+			}
+		}
+	}
+}
+
+@include tablet {
+	.banner_section {
+		text-align: center;
+		gap: 0 !important;
+		flex-direction: column-reverse;
+
+		.banner_content {
+			&_title {
+				margin-top: 0 !important;
+			}
+		}
+
+		.banner_logo {
+			img {
+				width: 350px !important;
+				height: 350px !important;
+			}
+		}
+	}
+}

@@ -1,7 +1,15 @@
+.inner {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: $white;
+}
+
 .header {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-around;
 	h1 {
 		font-weight: 800;
 		font-size: 1.5em;
@@ -72,8 +80,10 @@
 		position: relative;
 
 		&_drop {
+			box-shadow: rgb(145 158 171 / 20%) 0px 5px 5px -3px, rgb(145 158 171 / 14%) 0px 8px 10px 1px,
+				rgb(145 158 171 / 12%) 0px 3px 14px 2px;
 			position: absolute;
-			left: -200px;
+			left: -145px;
 			border-radius: 5px;
 			background: $white;
 			margin-top: 1em;
@@ -83,29 +93,38 @@
 			&_content {
 				display: flex;
 				flex-direction: column;
-				padding: 25px 20px;
-
+				padding: 0.5em;
 				p {
 					text-transform: capitalize;
+					line-height: 1.57143;
+					font-size: 0.875rem;
 					cursor: pointer;
-					padding: 1em;
-					transition: 0.5s;
+					transition: 0.2s;
+					padding: 6px 16px;
 					border-radius: 4px;
-					gap: 0.5em;
-					margin: 0.5em 0;
 				}
 
 				p:first-child {
-					color: $gray-20;
+					text-transform: lowercase;
+					margin: 0px;
+					line-height: 1.57143;
+					font-size: 0.875rem;
+					font-weight: 400;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					color: rgb(99, 115, 129);
 					border-bottom-left-radius: 0;
 					border-bottom-right-radius: 0;
-					border-bottom: 1px dotted;
+					border-bottom: 1px dashed;
 					padding-bottom: 1em;
+					margin-bottom: 0.5em;
 				}
-
-				p:hover {
-					background-color: $gray-20;
-					color: $white;
+				p:nth-child(2):hover,
+				p:nth-child(3):hover,
+				p:nth-child(4):hover,
+				p:nth-child(5):hover,
+				p:nth-child(6):hover {
+					background-color: rgba(145, 158, 171, 0.08);
 				}
 			}
 		}
