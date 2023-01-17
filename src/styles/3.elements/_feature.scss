@@ -1,0 +1,14 @@
+.section {
+	.feature_section {
+		&_title {
+			margin: 0 auto;
+			border-top: 2px solid $green;
+			max-width: 140px;
+			margin-bottom: 3em;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			text-align: center;
+			padding-top: 0.5em;
+		}
+	}
+}

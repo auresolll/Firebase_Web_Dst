@@ -13,7 +13,7 @@
 			}
 
 			&_desc {
-				max-width: 450px;
+				max-width: 750px;
 				margin: 1.5em 0;
 				color: $paragraph-color;
 			}
@@ -36,6 +36,15 @@
 				background-color: hsl(0, 0%, 17%);
 				color: $white;
 				padding: 1.2rem 1.5rem;
+			}
+		}
+
+		.banner_content_step {
+			display: flex;
+			justify-content: flex-start;
+			.step {
+				max-width: 400px;
+				min-width: 350px;
 			}
 		}
 

@@ -8,7 +8,7 @@ import { NewCustomer } from "../../states/state";
 interface ISignInProps {}
 
 const SignIn: React.FunctionComponent<ISignInProps> = (props) => {
-	const { handleAuthLocal } = useAuth();
+	const { handleAuthLocal, handleAuthGoogle } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -99,7 +99,7 @@ const SignIn: React.FunctionComponent<ISignInProps> = (props) => {
 									</span>
 									<p>Continue with Facebook</p>
 								</div>
-								<div className="auth-item-google auth-item">
+								<div className="auth-item-google auth-item" onClick={handleAuthGoogle}>
 									<span>
 										<i className="ri-google-line"></i>
 									</span>

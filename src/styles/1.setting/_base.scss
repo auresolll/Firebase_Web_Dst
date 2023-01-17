@@ -1,7 +1,14 @@
+body {
+	overflow-x: hidden;
+}
+
 .container {
 	padding: 2% 5%;
 }
 
+.section {
+	margin: 0 0 4.5em;
+}
 .active {
 	padding-bottom: 0.2em;
 	border-bottom: 2px solid $black;

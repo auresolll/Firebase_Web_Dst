@@ -4,6 +4,8 @@
 	left: 0;
 	width: 100%;
 	background-color: $white;
+	box-shadow: rgba(212, 215, 219, 0.2) 0px 5px 5px -3px, rgba(214, 217, 219, 0.14) 0px 8px 10px 1px,
+		rgba(233, 235, 238, 0.12) 0px 3px 14px 2px;
 }
 
 .header {
@@ -52,10 +54,14 @@
 		padding: 0.5em;
 		display: flex;
 		align-items: center;
-		border: 1px solid none;
 		justify-content: center;
 		transition: 0.5s;
 		cursor: pointer;
+		border-radius: 100%;
+	}
+
+	&_photo {
+		padding: 0 !important;
 	}
 
 	.user_icon {
@@ -131,7 +137,7 @@
 	}
 }
 
-@include laptop {
+@include tablet {
 	.header {
 		gap: 3.5em;
 	}

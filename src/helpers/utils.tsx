@@ -25,3 +25,7 @@ export const displayActionMessage = (msg: string, status = "info") => {
 		}
 	}, 5000);
 };
+
+export const generatorRandomKey = () => {
+	return Date.now();
+};

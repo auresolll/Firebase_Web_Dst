@@ -1,3 +1,4 @@
+import { getDatabase, ref, child, get } from "firebase/database";
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -33,7 +34,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 	};
 	const { state } = useStore();
 	const { handleSignOut } = useAuth();
-	console.log(state.customer);
+
 	return (
 		<>
 			<div className="inner">
@@ -76,7 +77,13 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 										onClick={() => setIsDropMenu(!isDropMenu)}
 									>
 										{state.customer.photoURL ? (
-											<img src={state.customer.photoURL} className="toggle_icon" alt="" />
+											<img
+												width="34px"
+												height="34px"
+												src={state.customer.photoURL}
+												className={`toggle_icon ${state.customer.photoURL && "toggle_photo"}`}
+												alt={String(state.customer.email)}
+											/>
 										) : (
 											<i className="ri-user-4-line"></i>
 										)}
@@ -85,10 +92,6 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 										<div className="toggle_customer_drop_content">
 											<p>{state.customer.email}</p>
 											<p>{state.customer.status}</p>
-											{state.customer.displayName ||
-												(state.customer.phoneNumber && (
-													<p>{state.customer.displayName || state.customer.phoneNumber}</p>
-												))}
 											<p>Home</p>
 											<p>Profile</p>
 											<p>Setting</p>
