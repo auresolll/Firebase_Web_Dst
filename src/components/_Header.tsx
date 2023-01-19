@@ -1,7 +1,5 @@
-import { getDatabase, ref, child, get } from "firebase/database";
 import * as React from "react";
-import { NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { CONTACT, FEATURE, HOME, PRODUCT, SIGNIN } from "../constants/router";
 import useAuth from "../hooks/useAuth";
 import { useStore } from "../states/context";
@@ -34,7 +32,6 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 	};
 	const { state } = useStore();
 	const { handleSignOut } = useAuth();
-
 	return (
 		<>
 			<div className="inner">

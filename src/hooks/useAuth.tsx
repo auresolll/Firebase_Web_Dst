@@ -6,14 +6,14 @@ import { AUTH_WRONG_USER } from "../constants/errors";
 import { HOME } from "../constants/router";
 import { ERROR, SUCCESS } from "../constants/utils";
 import { displayActionMessage } from "../helpers/utils";
-import { firebaseAuthInstance, FirebaseRepositoryInstance } from "../services/firebase";
+import { firebaseAuthInstance, firebaseRepositoryInstance } from "../services/firebase";
 import { ActionType } from "../states/actions";
 import { useStore } from "../states/context";
 import { Status } from "../states/state";
 
 const useAuth = () => {
 	const authInstance = firebaseAuthInstance;
-	const dbInstance = FirebaseRepositoryInstance;
+	const dbInstance = firebaseRepositoryInstance;
 	const navigate = useNavigate();
 	const { state, dispatch } = useStore();
 

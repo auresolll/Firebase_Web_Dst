@@ -9,22 +9,24 @@ import {
 	signInWithPopup,
 	signOut,
 } from "firebase/auth";
-import { child, Database, get, getDatabase, ref, set } from "firebase/database";
+import { Database, getDatabase } from "firebase/database";
 import {
 	collection,
-	endAt,
+	doc,
 	Firestore,
-	getCountFromServer,
+	getDocs,
 	getFirestore,
+	limit,
+	orderBy,
 	query,
-	startAt,
+	setDoc,
+	startAfter,
 } from "firebase/firestore";
 import { Customer } from "../states/state";
-import { generatorRandomKey } from "./../helpers/utils";
 import firebaseConfig from "./config.firebase";
 
 class Firebase {
-	private app: FirebaseApp;
+	protected app: FirebaseApp;
 	protected db: Database;
 	protected auth: Auth;
 	protected googleProvider: GoogleAuthProvider;
@@ -104,59 +106,48 @@ class FirebaseRepository extends Firebase {
 	}
 
 	public createCustomer = async (user: Customer) => {
-		const { email, uid } = user;
-		if (email !== "" && uid !== "") {
-			console.log(
-				await set(ref(this.db, "users/" + generatorRandomKey()), {
-					email,
-					uid,
-				})
-			);
+		const { email, photoURL } = user;
+		if (email !== "") {
+			const usersColRef = collection(this.store, "users");
+			await setDoc(doc(usersColRef, "SF"), {
+				name: "San Francisco",
+				country: "USA",
+				email: email,
+				photoURL: photoURL,
+			});
 		}
 	};
 
-	public getCustomer = async () => {
-		const dbRef = ref(this.db);
-		return get(child(dbRef, `users/`))
-			.then((snapshot) => {
-				if (snapshot.exists()) {
-					console.log(snapshot.val());
-					return snapshot.val();
-				} else {
-					console.log("No data available");
-				}
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	public getCustomers = async () => {
+		const usersColRef = collection(this.store, "users");
+		const usersSnap = await getDocs(usersColRef);
+		if (usersSnap.size === 0) {
+			console.log("No data available");
+		}
+		return usersSnap;
 	};
 
 	public getProductsWithPagination = async (_start: number, _limit: number) => {
-		const productsRef = collection(this.store, "products");
-		const query_ = query(productsRef, startAt(_start), endAt(_limit));
-		const snapshot = await getCountFromServer(query_);
-		console.log("count: ", snapshot.data().count);
-		return snapshot;
+		const productsColRef = collection(this.store, "products");
+		const _query = query(productsColRef, orderBy("timestamp"), startAfter(_start), limit(_limit));
+		const productsSnap = await getDocs(_query);
+		if (productsSnap.size === 0) {
+			console.log("No data available");
+		}
+		return productsSnap;
 	};
 
-	public getCategories = () => {
-		const dbRef = ref(this.db);
-		return get(child(dbRef, `categories/`))
-			.then((snapshot) => {
-				if (snapshot.exists()) {
-					console.log(snapshot.val());
-					return snapshot.val();
-				} else {
-					console.log("No data available");
-				}
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	public getCategories = async () => {
+		const categoriesColRef = collection(this.store, "categories");
+		const categoriesSnap = await getDocs(categoriesColRef);
+		if (categoriesSnap.size === 0) {
+			console.log("No data available");
+		}
+		return categoriesSnap;
 	};
 }
 
 const firebaseAuthInstance = new FirebaseAuth();
-const FirebaseRepositoryInstance = new FirebaseRepository();
+const firebaseRepositoryInstance = new FirebaseRepository();
 
-export { firebaseAuthInstance, FirebaseRepositoryInstance };
+export { firebaseAuthInstance, firebaseRepositoryInstance };
