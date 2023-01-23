@@ -14,6 +14,7 @@ import {
 	collection,
 	doc,
 	Firestore,
+	getDoc,
 	getDocs,
 	getFirestore,
 	limit,
@@ -21,6 +22,7 @@ import {
 	query,
 	setDoc,
 	startAfter,
+	where,
 } from "firebase/firestore";
 import { Customer } from "../states/state";
 import firebaseConfig from "./config.firebase";
@@ -144,6 +146,16 @@ class FirebaseRepository extends Firebase {
 			console.log("No data available");
 		}
 		return categoriesSnap;
+	};
+
+	public getProductsWithSlug = async (slug: string) => {
+		const productsColRef = collection(this.store, `products`);
+		const q = query(productsColRef, where("category", "==", `${slug}`));
+		const productsSnap = await getDocs(q);
+		if (productsSnap.size === 0) {
+			console.log("No data available");
+		}
+		return productsSnap;
 	};
 }
 

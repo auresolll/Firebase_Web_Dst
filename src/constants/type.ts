@@ -1,7 +1,26 @@
 export interface IProduct {
 	title: string;
 	cost: string;
+	desc: string;
+	rating: number;
 	thumbnail: string;
 	sale: number;
-	timestamp: Date;
+	timestamp: string;
+}
+
+export interface IExtra {
+	title: string;
+	cost: string;
+	thumbnail: string;
+	quantity: number;
+	timestamp: string;
+}
+
+export interface ICategories {
+	drink: [];
+	food: [];
+}
+export interface IPagination {
+	start: number;
+	limit: number;
 }

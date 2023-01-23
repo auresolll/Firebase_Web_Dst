@@ -6,6 +6,10 @@ body {
 	padding: 2% 5%;
 }
 
+.main {
+	margin: 2.5em 0;
+}
+
 .section {
 	margin: 0 0 4.5em;
 }
@@ -14,11 +18,16 @@ body {
 	border-bottom: 2px solid $black;
 }
 
+.clearfix {
+	overflow-y: auto;
+}
+
 .grid {
 	display: grid;
 }
 
 .main {
+	margin-top: 5em;
 	overflow: hidden;
 }
 
@@ -27,7 +36,7 @@ body {
 }
 
 .close_menu {
-	left: -70em !important;
+	left: 0 !important;
 	transition: 0.5s;
 }
 

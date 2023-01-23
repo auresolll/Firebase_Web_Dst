@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { CONTACT, FEATURE, HOME, PRODUCT, SIGNIN } from "../constants/router";
+import { SUCCESS } from "../constants/utils";
+import { displayActionMessage } from "../helpers/utils";
 import useAuth from "../hooks/useAuth";
 import { useStore } from "../states/context";
 
@@ -31,6 +33,8 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 		borderBottom: "2px solid $black",
 	};
 	const { state } = useStore();
+	console.log(state.baskets.basket);
+
 	const { handleSignOut } = useAuth();
 	return (
 		<>
@@ -57,10 +61,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 						</ul>
 					</nav>
 					<div className="toggle">
-						<span
-							className="shopping_icon toggle_active toggle_icon"
-							onClick={() => setIsToggle(!isToggle)}
-						>
+						<span className="toggle_active toggle_icon" onClick={() => setIsToggle(!isToggle)}>
 							<i className="ri-menu-3-line"></i>
 						</span>
 						<span className="shopping_icon toggle_icon">

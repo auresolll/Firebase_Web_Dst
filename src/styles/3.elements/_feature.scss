@@ -13,9 +13,9 @@
 	}
 
 	.featured__container {
-		// row-gap: 2.5rem;
+		row-gap: 2.5rem;
 		padding: 0 2.5em;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		justify-content: center;
 		align-items: flex-start;
 		gap: 1.5rem;
@@ -29,7 +29,7 @@
 			background-color: var(--container-color);
 			padding-top: 2rem;
 			border: 1px solid var(--border-color);
-			overflow-y: hidden;
+			overflow: hidden;
 			transition: 0.3s;
 		}
 
@@ -92,13 +92,13 @@
 	}
 }
 
-@include tablet {
+@include laptop {
 	.featured__container {
-		grid-template-columns: repeat(2, 1fr) !important;
+		grid-template-columns: repeat(3, 1fr) !important;
 	}
 }
 
-@include mobile {
+@include tablet {
 	.featured__container {
 		padding: 0 2.5em;
 		grid-template-columns: 1fr !important;
