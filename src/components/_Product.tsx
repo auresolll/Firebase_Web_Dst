@@ -4,11 +4,14 @@ import { Box, Button, Checkbox, Divider, Drawer } from "@mui/material";
 import { Stack } from "@mui/system";
 import { DocumentData } from "firebase/firestore";
 import * as React from "react";
+import { Link } from "react-router-dom";
+import { SIGNIN } from "../constants/router";
 import { IExtra, IProduct } from "../constants/type";
 import { formatVND } from "../helpers/utils";
 import { firebaseRepositoryInstance } from "../services/firebase";
 import { ActionType } from "../states/actions";
 import { useStore } from "../states/context";
+import { Basket } from "../states/state";
 
 interface IFeatureProductProps {
 	product: IProduct;
@@ -17,12 +20,13 @@ interface IFeatureProductProps {
 type Anchor = "right";
 const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) => {
 	const anchor: Anchor = "right";
-	const { dispatch } = useStore();
+	const { state, dispatch } = useStore();
 	const [extraProducts, setExtraProducts] = React.useState<IExtra[]>([]);
-	const [state, setState] = React.useState({
+	const [stateDraw, setState] = React.useState({
 		right: false,
 	});
 
+	const [DRINK_PRODUCTS, setDRINK_PRODUCTS] = React.useState<DocumentData[]>([]);
 	const toggleDrawer =
 		(anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
 			if (
@@ -36,8 +40,22 @@ const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) =>
 			setState({ ...state, [anchor]: open });
 		};
 
-	const [DRINK_PRODUCTS, setDRINK_PRODUCTS] = React.useState<DocumentData[]>([]);
-
+	const handleAddToBasket = (timestamp: string): void => {
+		const cb = (el: Basket) => el.product.timestamp === timestamp;
+		const isCheckedExits = state.baskets.basket.findIndex(cb);
+		if (isCheckedExits === -1) {
+			dispatch({
+				type: ActionType.AddBasket,
+				payload: {
+					product: props.product,
+					quantity: 1,
+					extra: extraProducts,
+				},
+			});
+		}
+		setExtraProducts([]);
+		setState({ ...state, [anchor]: false });
+	};
 	React.useEffect(() => {
 		const fetchProducts = async () => {
 			const drink = firebaseRepositoryInstance.getProductsWithSlug("drink");
@@ -73,7 +91,7 @@ const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) =>
 
 				<div className="order">
 					<React.Fragment key={anchor}>
-						<Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+						<Drawer anchor={anchor} open={stateDraw[anchor]} onClose={toggleDrawer(anchor, false)}>
 							<div className="order_container">
 								<div className="order_content">
 									<img
@@ -119,28 +137,28 @@ const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) =>
 							</div>
 							<Divider />
 							<Box sx={{ p: 3 }}>
-								<Button
-									onClick={() => {
-										dispatch({
-											type: ActionType.AddBasket,
-											payload: {
-												product: props.product,
-												quantity: 1,
-												extra: extraProducts,
-											},
-										});
-										setExtraProducts([]);
-										setState({ ...state, [anchor]: false });
-									}}
-									fullWidth
-									size="large"
-									type="submit"
-									color="success"
-									variant="outlined"
-								>
-									<AddCircleIcon sx={{ marginRight: ".5em" }} />
-									<span>add to basket</span>
-								</Button>
+								{state.customer.uid ? (
+									<Button
+										onClick={() => {
+											handleAddToBasket(props.product.timestamp);
+										}}
+										fullWidth
+										size="large"
+										type="submit"
+										color="success"
+										variant="outlined"
+									>
+										<AddCircleIcon sx={{ marginRight: ".5em" }} />
+										<span>add to basket</span>
+									</Button>
+								) : (
+									<Button fullWidth size="large" type="submit" color="success" variant="outlined">
+										<AddCircleIcon sx={{ marginRight: ".5em" }} />
+										<span>
+											<Link to={SIGNIN}>add to basket</Link>
+										</span>
+									</Button>
+								)}
 							</Box>
 						</Drawer>
 					</React.Fragment>

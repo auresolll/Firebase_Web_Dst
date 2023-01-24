@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { CONTACT, FEATURE, HOME, PRODUCT, SIGNIN } from "../constants/router";
-import { SUCCESS } from "../constants/utils";
-import { displayActionMessage } from "../helpers/utils";
 import useAuth from "../hooks/useAuth";
 import { useStore } from "../states/context";
+import Baskets from "./_Baskets";
 
 interface IHeaderProps {}
 const ROUTES = [
@@ -25,6 +24,8 @@ const ROUTES = [
 		label: "Contact",
 	},
 ];
+
+export type Anchor = "right";
 const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 	const [isToggle, setIsToggle] = React.useState<boolean>(false);
 	const [isDropMenu, setIsDropMenu] = React.useState<boolean>(false);
@@ -33,9 +34,24 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 		borderBottom: "2px solid $black",
 	};
 	const { state } = useStore();
-	console.log(state.baskets.basket);
-
 	const { handleSignOut } = useAuth();
+	const anchor: Anchor = "right";
+	const [stateDrawer, setState] = React.useState({
+		right: false,
+	});
+
+	const toggleDrawer =
+		(anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+			if (
+				event.type === "keydown" &&
+				((event as React.KeyboardEvent).key === "Tab" ||
+					(event as React.KeyboardEvent).key === "Shift")
+			) {
+				return;
+			}
+
+			setState({ ...state, [anchor]: open });
+		};
 	return (
 		<>
 			<div className="inner">
@@ -64,7 +80,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 						<span className="toggle_active toggle_icon" onClick={() => setIsToggle(!isToggle)}>
 							<i className="ri-menu-3-line"></i>
 						</span>
-						<span className="shopping_icon toggle_icon">
+						<span className="shopping_icon toggle_icon" onClick={toggleDrawer(anchor, true)}>
 							<i className="ri-shopping-bag-line"></i>
 						</span>
 						{state.customer.uid ? (
@@ -107,6 +123,9 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 							</Link>
 						)}
 					</div>
+					{anchor && (
+						<Baskets anchor={anchor} stateDrawer={stateDrawer} toggleDrawer={toggleDrawer} />
+					)}
 				</header>
 			</div>
 		</>

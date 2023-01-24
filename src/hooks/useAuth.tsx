@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AUTH_WRONG_USER } from "../constants/errors";
 import { HOME } from "../constants/router";
 import { ERROR, SUCCESS } from "../constants/utils";
-import { displayActionMessage } from "../helpers/utils";
+import { customerToStore, displayActionMessage } from "../helpers/utils";
 import { firebaseAuthInstance, firebaseRepositoryInstance } from "../services/firebase";
 import { ActionType } from "../states/actions";
 import { useStore } from "../states/context";
@@ -19,8 +19,8 @@ const useAuth = () => {
 
 	const handleSignOut = () => {
 		authInstance.signOut();
-		return authInstance.onAuthStateChanged().catch((error) => {
-			dispatch({
+		return authInstance.onAuthStateChanged().catch(async (error) => {
+			await dispatch({
 				type: ActionType.AddCustomer,
 				payload: {
 					displayName: "",
@@ -33,6 +33,15 @@ const useAuth = () => {
 				},
 			});
 
+			customerToStore().setCustomer({
+				displayName: "",
+				email: "",
+				phoneNumber: "",
+				photoURL: "",
+				providerId: "",
+				status: Status.signOut,
+				uid: "",
+			});
 			return displayActionMessage(Status.signOut, SUCCESS);
 		});
 	};
@@ -52,6 +61,15 @@ const useAuth = () => {
 						status: Status.signIn,
 						uid: cb.user.uid,
 					},
+				});
+				customerToStore().setCustomer({
+					displayName: cb.user.displayName,
+					email: cb.user.email,
+					phoneNumber: cb.user.phoneNumber,
+					photoURL: cb.user.photoURL as string | undefined,
+					providerId: cb.user.providerId,
+					status: Status.signIn,
+					uid: cb.user.uid,
 				});
 				return displayActionMessage(Status.signIn, SUCCESS);
 			})
@@ -75,13 +93,21 @@ const useAuth = () => {
 						dbInstance.createCustomer(cb);
 						navigate(HOME);
 						displayActionMessage(Status.newAccount, SUCCESS);
+						customerToStore().setCustomer({
+							displayName: cb.displayName,
+							email: cb.email,
+							phoneNumber: cb.phoneNumber,
+							photoURL: cb.photoURL as string | undefined,
+							providerId: cb.providerId,
+							status: Status.signIn,
+							uid: cb.uid,
+						});
 						return dbInstance.createCustomer(cb);
 					});
 				}
 				return displayActionMessage(error.message, ERROR);
 			});
 	};
-
 	const handleAuthGoogle = () => {
 		return authInstance.signInWithPopup().then((cb) => {
 			console.log(typeof cb);

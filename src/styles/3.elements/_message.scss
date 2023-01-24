@@ -1,15 +1,21 @@
 .toast {
-	position: absolute;
+	position: fixed;
 	top: 120px;
 	right: 167px;
 	max-width: 300px;
 	max-width: 300px;
 	z-index: 99;
 	padding: 0.5em 1em;
-	background-color: $red;
 	&-msg {
 		color: $white;
 		font-weight: 600;
 		line-height: 19px;
 	}
+}
+.toast-success {
+	background-color: $green;
+}
+
+.toast-error {
+	background-color: $red;
 }

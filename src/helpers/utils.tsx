@@ -1,3 +1,5 @@
+import { Customer } from "../states/state";
+
 export const displayActionMessage = (msg: string, status = "info") => {
 	const div = document.createElement("div");
 	const span = document.createElement("span");
@@ -32,4 +34,21 @@ export const generatorRandomKey = () => {
 
 export const formatVND = (number: number) => {
 	return number.toLocaleString("it-IT", { style: "currency", currency: "VND" });
+};
+
+export const customerToStore = () => {
+	const setCustomer = (customer: Customer) => {
+		console.log(customer);
+
+		return localStorage.setItem("customer", JSON.stringify(customer));
+	};
+
+	const getCustomer = () => {
+		return JSON.parse(localStorage.getItem("customer") || `{}`);
+	};
+
+	return {
+		setCustomer,
+		getCustomer,
+	};
 };
