@@ -1,7 +1,7 @@
 import { Drawer, useMediaQuery, useTheme } from "@mui/material";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { FEATURE, SIGNIN } from "../constants/router";
+import { CHECKOUT, FEATURE, SIGNIN } from "../constants/router";
 import { IExtra } from "../constants/type";
 import { formatVND } from "../helpers/utils";
 import { ActionType } from "../states/actions";
@@ -185,7 +185,9 @@ const Basket: React.FunctionComponent<IBasketProps> = (props) => {
 												<p className="basket-container-checkout-title">Subtotal Amount</p>
 												<p className="basket-container-checkout-cost">{formatVND(Number(total))}</p>
 											</div>
-											<button>CheckOut</button>
+											<button>
+												<Link to={CHECKOUT}>CheckOut</Link>
+											</button>
 										</div>
 									</div>
 								</>
