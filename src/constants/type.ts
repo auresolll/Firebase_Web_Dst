@@ -9,6 +9,7 @@ export interface IProduct {
 }
 
 export interface IExtra {
+	[x: string]: any;
 	title: string;
 	cost: string;
 	thumbnail: string;

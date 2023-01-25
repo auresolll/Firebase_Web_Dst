@@ -6,7 +6,12 @@ export enum ActionType {
 	OnAuthStateChanged,
 	AddBasket,
 	AddExtra,
-	ResetStatus,
+	ResetBasket,
+	ResetExtra,
+	ChangeQuantityProduct,
+	ChangeQuantityExtra,
+	DeleteProduct,
+	DeleteExtra,
 }
 
 export interface AddExtra {
@@ -14,8 +19,15 @@ export interface AddExtra {
 	payload: Customer;
 }
 
-export interface ResetStatus {
-	type: ActionType.ResetStatus;
+export interface ResetBasket {
+	type: ActionType.ResetBasket;
+}
+
+export interface ResetExtra {
+	type: ActionType.ResetExtra;
+	payload: {
+		timestamp: string;
+	};
 }
 
 export interface AddCustomer {
@@ -30,10 +42,48 @@ export interface AddBasket {
 	type: ActionType.AddBasket;
 	payload: Basket;
 }
+export interface ChangeQuantityProduct {
+	type: ActionType.ChangeQuantityProduct;
+	payload: {
+		timestamp: string;
+		operate: boolean;
+	};
+}
+export interface ChangeQuantityExtra {
+	type: ActionType.ChangeQuantityExtra;
+	payload: {
+		timestampProduct: string;
+		timestampExtra: string;
+		operate: boolean;
+	};
+}
+export interface DeleteProduct {
+	type: ActionType.DeleteProduct;
+	payload: {
+		timestamp: string;
+	};
+}
+export interface DeleteExtra {
+	type: ActionType.DeleteExtra;
+	payload: {
+		timestampProduct: string;
+		timestampExtra: string;
+	};
+}
 
 export interface OnAuthStateChanged {
 	type: ActionType.OnAuthStateChanged;
 	payload: { id: number; value: number };
 }
 
-export type StoreActions = AddCustomer | OnAuthStateChanged | AddBasket | AddExtra | ResetStatus;
+export type StoreActions =
+	| AddCustomer
+	| OnAuthStateChanged
+	| AddBasket
+	| AddExtra
+	| ResetBasket
+	| ResetExtra
+	| ChangeQuantityProduct
+	| ChangeQuantityExtra
+	| DeleteProduct
+	| DeleteExtra;

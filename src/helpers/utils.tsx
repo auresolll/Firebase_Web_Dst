@@ -1,4 +1,4 @@
-import { Customer } from "../states/state";
+import { Baskets, Customer } from "../states/state";
 
 export const displayActionMessage = (msg: string, status = "info") => {
 	const div = document.createElement("div");
@@ -50,5 +50,20 @@ export const customerToStore = () => {
 	return {
 		setCustomer,
 		getCustomer,
+	};
+};
+
+export const basketToStore = () => {
+	const setBasket = (baskets: Baskets) => {
+		return localStorage.setItem("basket", JSON.stringify(baskets));
+	};
+
+	const getBasket = () => {
+		return JSON.parse(localStorage.getItem("basket") || `[]`);
+	};
+
+	return {
+		setBasket,
+		getBasket,
 	};
 };
