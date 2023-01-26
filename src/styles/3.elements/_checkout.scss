@@ -1,6 +1,10 @@
 .checkout-section {
 	margin-top: 3em;
 
+	.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active,
+	.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+		color: #575b5e !important;
+	}
 	.checkout-container {
 		margin: 3em;
 		text-align: center;
@@ -32,12 +36,62 @@
 			justify-content: space-around;
 			margin-top: 3em;
 
-			button {
-				background-color: $green;
-				color: $white;
-				border: 0;
-				padding: 9px 39px;
-			}
+			// button {
+			// 	background-color: $green;
+			// 	border-radius: 4px;
+			// 	color: $white;
+			// 	border: 0;
+			// 	padding: 13px 38px;
+			// }
 		}
+	}
+}
+
+.shipping-checkout-section {
+	.shipping-checkout-form {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		max-width: 748px;
+		margin: 0 auto;
+		gap: 2.5em;
+	}
+
+	.shipping-checkout-form-field {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		label {
+			text-align: left;
+			padding: 1rem 1.2rem;
+			color: #696868;
+			border: none;
+			font-size: 0.8rem;
+			font-weight: 700;
+		}
+
+		input {
+			padding: 7px 1.3rem !important;
+			border: 1px solid #c5c5c5 !important;
+			font-size: 0.9rem !important;
+			outline: none;
+			background-color: initial;
+		}
+	}
+}
+
+.payment-checkout-section {
+	.payment-checkout-field {
+		max-width: 400px;
+		min-width: 400px;
+		margin: 0.5em auto;
+		text-align: left;
+		padding: 19px 2em;
+		border: 1px solid #e1e1e1;
+		background: #f1f1f1;
+		color: $black;
+		display: block;
+		font-size: 0.83em;
+		font-weight: bold;
 	}
 }
