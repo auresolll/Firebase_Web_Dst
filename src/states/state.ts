@@ -3,6 +3,7 @@ import { IExtra, IProduct } from "../constants/type";
 export interface StoreState {
 	customer: Customer;
 	baskets: Baskets;
+	order: Order;
 }
 
 export enum Status {
@@ -20,10 +21,18 @@ export interface Customer {
 	uid: string;
 	status: Status;
 }
+
 export interface NewCustomer {
 	fullname?: string;
 	email?: string;
 	password?: string;
+}
+
+export interface Order {
+	fullname: string;
+	email: string;
+	address: string;
+	phone: string;
 }
 
 export interface Basket {
@@ -50,5 +59,11 @@ export const initialStoreState: StoreState = {
 	baskets: {
 		basket: [],
 		total: 0,
+	},
+	order: {
+		address: "",
+		email: "",
+		fullname: "",
+		phone: "",
 	},
 };

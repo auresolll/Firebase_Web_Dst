@@ -14,7 +14,6 @@ import {
 	collection,
 	doc,
 	Firestore,
-	getDoc,
 	getDocs,
 	getFirestore,
 	limit,
@@ -24,6 +23,7 @@ import {
 	startAfter,
 	where,
 } from "firebase/firestore";
+import { CATEGORIES, PRODUCTS, TYPE, USERS } from "../constants/utils";
 import { Customer } from "../states/state";
 import firebaseConfig from "./config.firebase";
 
@@ -110,7 +110,7 @@ class FirebaseRepository extends Firebase {
 	public createCustomer = async (user: Customer) => {
 		const { email, photoURL } = user;
 		if (email !== "") {
-			const usersColRef = collection(this.store, "users");
+			const usersColRef = collection(this.store, USERS);
 			await setDoc(doc(usersColRef, "SF"), {
 				name: "San Francisco",
 				country: "USA",
@@ -121,7 +121,7 @@ class FirebaseRepository extends Firebase {
 	};
 
 	public getCustomers = async () => {
-		const usersColRef = collection(this.store, "users");
+		const usersColRef = collection(this.store, USERS);
 		const usersSnap = await getDocs(usersColRef);
 		if (usersSnap.size === 0) {
 			console.log("No data available");
@@ -130,7 +130,7 @@ class FirebaseRepository extends Firebase {
 	};
 
 	public getProductsWithPagination = async (_start: number, _limit: number) => {
-		const productsColRef = collection(this.store, "products");
+		const productsColRef = collection(this.store, PRODUCTS);
 		const _query = query(productsColRef, orderBy("timestamp"), startAfter(_start), limit(_limit));
 		const productsSnap = await getDocs(_query);
 		if (productsSnap.size === 0) {
@@ -140,7 +140,7 @@ class FirebaseRepository extends Firebase {
 	};
 
 	public getCategories = async () => {
-		const categoriesColRef = collection(this.store, "categories");
+		const categoriesColRef = collection(this.store, CATEGORIES);
 		const categoriesSnap = await getDocs(categoriesColRef);
 		if (categoriesSnap.size === 0) {
 			console.log("No data available");
@@ -149,8 +149,8 @@ class FirebaseRepository extends Firebase {
 	};
 
 	public getProductsWithSlug = async (slug: string) => {
-		const productsColRef = collection(this.store, `products`);
-		const q = query(productsColRef, where("category", "==", `${slug}`));
+		const productsColRef = collection(this.store, PRODUCTS);
+		const q = query(productsColRef, where(TYPE, "==", `${slug}`));
 		const productsSnap = await getDocs(q);
 		if (productsSnap.size === 0) {
 			console.log("No data available");

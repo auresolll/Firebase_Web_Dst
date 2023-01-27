@@ -15,24 +15,27 @@ import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import * as React from "react";
 import UseCategories from "../hooks/useCategories";
+import Search from "./_Search";
 
-export const FILTER_RATING_OPTIONS = ["up4Star", "up3Star", "up2Star", "up1Star"];
+export const FILTER_RATING_OPTIONS = ["1", "2", "3", "4"];
 
 export const FILTER_PRICE_OPTIONS = [
-	{ value: "below", label: "Below 20.000 VND", price: 19000 },
-	{ value: "between", label: "Between 20.000 - 50.000 VND", price: 50000 },
-	{ value: "above", label: "Above 50.000 VND", price: 500000 },
+	{ value: "below", label: "Below 20.000 VND", price: "19000" },
+	{ value: "between", label: "Between 20.000 - 50.000 VND", price: "50000" },
+	{ value: "above", label: "Above 50.000 VND", price: "500000" },
 ];
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
-interface IProductFilterSideBarProps {}
+interface IProductFilterSideBarProps {
+	searchField: string;
+	onFilter: (name: string, value: string) => void;
+	onCleanFilter: () => void;
+	onSearch: (search: string) => void;
+}
 const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> = (props) => {
 	const anchor: Anchor = "right";
 	const [state, setState] = React.useState({
-		top: false,
-		left: false,
-		bottom: false,
 		right: false,
 	});
 	const toggleDrawer =
@@ -66,10 +69,13 @@ const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> 
 	return (
 		<>
 			<React.Fragment key={anchor}>
-				<Button disableRipple color="inherit" onClick={toggleDrawer(anchor, true)}>
-					<h3 className="font-bold text-xs px-4">Filters&nbsp;</h3>
-					<FilterListIcon />
-				</Button>
+				<Stack flexDirection={"row"} justifyContent={"space-between"}>
+					<Button disableRipple color="inherit" onClick={toggleDrawer(anchor, true)}>
+						<h3 className="font-bold text-xs px-4">Filters&nbsp;</h3>
+						<FilterListIcon />
+					</Button>
+					<Search search={props.searchField} onSearch={props.onSearch} />
+				</Stack>
 				<Drawer
 					anchor={anchor}
 					open={state[anchor]}
@@ -92,14 +98,19 @@ const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> 
 						</Stack>
 
 						<Divider />
-
 						<Stack spacing={3} sx={{ p: 3 }}>
 							<div>
 								<h5 className="font-semibold">Categories</h5>
 								<RadioGroup sx={{ padding: "1em 0 0" }}>
 									{newCATEGORIES.length > 0 &&
-										newCATEGORIES.map((item: string, index: number) => (
-											<FormControlLabel key={index} value={item} control={<Radio />} label={item} />
+										newCATEGORIES.map((item, index: number) => (
+											<FormControlLabel
+												key={index}
+												value={item}
+												control={<Radio />}
+												label={item}
+												onClick={() => props.onFilter("category", item)}
+											/>
 										))}
 								</RadioGroup>
 							</div>
@@ -113,6 +124,7 @@ const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> 
 											value={item.price}
 											control={<Radio />}
 											label={item.label}
+											onClick={() => props.onFilter("cost", item.price)}
 										/>
 									))}
 								</RadioGroup>
@@ -135,6 +147,7 @@ const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> 
 													}}
 												/>
 											}
+											onClick={() => props.onFilter("rating", item)}
 											label="& Up"
 											sx={{
 												my: 0.5,
@@ -149,7 +162,14 @@ const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> 
 
 						<Divider />
 						<Box sx={{ p: 3 }}>
-							<Button fullWidth size="large" type="submit" color="error" variant="outlined">
+							<Button
+								fullWidth
+								size="large"
+								type="submit"
+								color="error"
+								variant="outlined"
+								onClick={props.onCleanFilter}
+							>
 								<DoNotDisturbAltIcon sx={{ marginRight: ".5em" }} />
 								<span>Clear All</span>
 							</Button>

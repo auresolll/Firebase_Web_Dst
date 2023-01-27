@@ -1,6 +1,8 @@
 import { Button, Step, StepLabel, Stepper } from "@mui/material";
 import * as React from "react";
 import { redirect } from "react-router-dom";
+import { ERROR } from "../../constants/utils";
+import { displayActionMessage } from "../../helpers/utils";
 import { useStore } from "../../states/context";
 import OrderSummary from "./_OrderSumary";
 import Payment from "./_Payment";
@@ -17,12 +19,21 @@ const CheckOut: React.FunctionComponent<ICheckOutProps> = (props) => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const { state } = useStore();
 	const handleStep = (operator: boolean) => {
-		if (activeStep > 3) return;
+		const isEmptyInfo =
+			state.order.phone === "" &&
+			state.order.address === "" &&
+			state.order.email === "" &&
+			state.order.fullname === "";
+		if (activeStep === 1 && isEmptyInfo) return;
+		if (activeStep === 2) {
+			displayActionMessage("The feature payment don't update", ERROR);
+			return;
+		}
 		if (operator) {
 			return setActiveStep(activeStep + 1);
 		}
 		if (activeStep === 0) return;
-		return setActiveStep(activeStep - 1);
+		setActiveStep(activeStep - 1);
 	};
 	const getContentActiveStep = (activeStep: number) => {
 		switch (activeStep) {

@@ -112,7 +112,7 @@ const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) =>
 									{DRINK_PRODUCTS.length !== 0 &&
 										DRINK_PRODUCTS.map((val, index: number) => (
 											<>
-												<Stack flexDirection={"row"} alignItems={"center"}>
+												<Stack key={val.timestamp} flexDirection={"row"} alignItems={"center"}>
 													<Checkbox
 														size="small"
 														onClick={() =>

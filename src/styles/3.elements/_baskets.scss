@@ -165,12 +165,13 @@
 		button {
 			border: 0;
 			background-color: $gray-01;
-			color: $white;
-			line-height: 2.4rem;
-			font-size: 1.2em;
-			height: 60px;
-			padding: 0 1.2em;
-			cursor: pointer;
+			a {
+				padding: 0 1.2em;
+				color: $white;
+				line-height: 2.4rem;
+				font-size: 1.2em;
+				cursor: pointer;
+			}
 		}
 	}
 }

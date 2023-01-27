@@ -25,7 +25,7 @@ export const displayActionMessage = (msg: string, status = "info") => {
 		} catch (e) {
 			console.log(e);
 		}
-	}, 5000);
+	}, 2000);
 };
 
 export const generatorRandomKey = () => {

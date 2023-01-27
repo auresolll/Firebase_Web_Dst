@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { CONTACT, FEATURE, HOME, PRODUCT, SIGNIN } from "../constants/router";
+import { CONTACT, FEATURE, HOME, PRODUCT, PROFILE, SIGNIN } from "../constants/router";
 import useAuth from "../hooks/useAuth";
 import { useStore } from "../states/context";
 import Baskets from "./_Baskets";
@@ -106,8 +106,12 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 										<div className="toggle_customer_drop_content">
 											<p>{state.customer.email}</p>
 											<p>{state.customer.status}</p>
-											<p>Home</p>
-											<p>Profile</p>
+											<p>
+												<Link to={HOME}>Home</Link>
+											</p>
+											<p>
+												<Link to={PROFILE}>Profile</Link>
+											</p>
 											<p>Setting</p>
 
 											<p onClick={handleSignOut}>Sign Out</p>

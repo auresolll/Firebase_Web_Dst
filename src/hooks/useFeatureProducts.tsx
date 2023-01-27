@@ -9,6 +9,7 @@ const UseFeatureProducts = () => {
 		start: 0,
 		limit: 3,
 	});
+
 	React.useEffect(() => {
 		const fetchProducts = () => {
 			const products = firebaseRepositoryInstance.getProductsWithPagination(
@@ -25,9 +26,10 @@ const UseFeatureProducts = () => {
 		};
 		const startFetch = setTimeout(fetchProducts, 100);
 		return () => clearTimeout(startFetch);
-	}, []);
+	}, [pagination.start, pagination.limit]);
 	return {
 		PRODUCTS,
+		pagination,
 		setPagination,
 	};
 };

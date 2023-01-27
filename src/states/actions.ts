@@ -1,5 +1,5 @@
 import { IExtra } from "./../constants/type";
-import { Basket, Customer, NewCustomer } from "./state";
+import { Basket, Customer, NewCustomer, Order } from "./state";
 
 export enum ActionType {
 	AddCustomer,
@@ -12,11 +12,20 @@ export enum ActionType {
 	ChangeQuantityExtra,
 	DeleteProduct,
 	DeleteExtra,
+	AddInfoOrder,
 }
 
-export interface AddExtra {
+export interface AddCustomer {
 	type: ActionType.AddCustomer;
 	payload: Customer;
+}
+
+export interface AddInfoOrder {
+	type: ActionType.AddInfoOrder;
+	payload: {
+		name: string;
+		value: string;
+	};
 }
 
 export interface ResetBasket {
@@ -30,7 +39,7 @@ export interface ResetExtra {
 	};
 }
 
-export interface AddCustomer {
+export interface AddExtra {
 	type: ActionType.AddExtra;
 	payload: {
 		extra: IExtra[];
@@ -86,4 +95,5 @@ export type StoreActions =
 	| ChangeQuantityProduct
 	| ChangeQuantityExtra
 	| DeleteProduct
-	| DeleteExtra;
+	| DeleteExtra
+	| AddInfoOrder;

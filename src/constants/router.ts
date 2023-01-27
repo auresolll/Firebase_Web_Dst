@@ -5,3 +5,4 @@ export const PRODUCT = "/products";
 export const CONTACT = "/contact";
 export const SIGNIN = "/signin";
 export const CHECKOUT = "/checkout";
+export const PROFILE = "/profile";

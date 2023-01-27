@@ -22,7 +22,6 @@ export function storeReducer(state: StoreState, action: StoreActions): StoreStat
 						),
 						action.payload,
 					],
-					total: 10,
 				},
 			};
 
@@ -41,6 +40,15 @@ export function storeReducer(state: StoreState, action: StoreActions): StoreStat
 		// 			},
 		// 		},
 		// 	};
+
+		case ActionType.AddInfoOrder:
+			return {
+				...state,
+				order: {
+					...state.order,
+					[action.payload.name]: action.payload.value,
+				},
+			};
 
 		case ActionType.ChangeQuantityProduct:
 			return {

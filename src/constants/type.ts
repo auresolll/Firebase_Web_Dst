@@ -6,6 +6,8 @@ export interface IProduct {
 	thumbnail: string;
 	sale: number;
 	timestamp: string;
+	category: string;
+	type: string;
 }
 
 export interface IExtra {
