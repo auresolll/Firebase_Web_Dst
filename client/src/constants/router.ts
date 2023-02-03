@@ -1,5 +1,5 @@
 export const APP = "/";
-export const HOME = "/app";
+export const HOME = "/  ";
 export const FEATURE = "/features";
 export const PRODUCT = "/products";
 export const CONTACT = "/contact";

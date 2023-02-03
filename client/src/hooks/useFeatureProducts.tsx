@@ -19,6 +19,7 @@ const UseFeatureProducts = () => {
 
 			products.then(async (val) => {
 				const result: DocumentData[] = await val.docs.map((el) => {
+					Object(el.data())["doc"] = el.id;
 					return el.data();
 				});
 				setPRODUCTS(result as unknown as IProduct[]);

@@ -124,6 +124,15 @@ const useAuth = () => {
 						uid: cb.user.uid,
 					},
 				});
+				customerToStore().setCustomer({
+					displayName: cb.user.displayName,
+					email: cb.user.email,
+					phoneNumber: cb.user.phoneNumber,
+					photoURL: cb.user.photoURL as string | undefined,
+					providerId: cb.user.providerId,
+					status: Status.signIn,
+					uid: cb.user.uid,
+				});
 				navigate(HOME);
 				return displayActionMessage(Status.signIn, SUCCESS);
 			}
