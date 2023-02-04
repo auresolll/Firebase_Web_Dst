@@ -12,6 +12,7 @@ import {
 	TextField,
 } from "@mui/material";
 import * as React from "react";
+import UseCustomer from "../hooks/useCustomer";
 
 interface INewCustomerProps {
 	open: boolean;

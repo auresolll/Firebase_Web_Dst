@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import { visuallyHidden } from "@mui/utils";
 import UseCustomer from "../hooks/useCustomer";
 import * as React from "react";
+import firebaseRepositoryInstance from "../services/firebaseRepository";
 
 interface Data {
 	name: string;
@@ -158,11 +159,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
 	numSelected: number;
+	rowsRemove: readonly string[];
+	callData: boolean;
+	setCallData: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-	const { numSelected } = props;
-
+	const { numSelected, rowsRemove, callData, setCallData } = props;
+	const firebaseRepository = firebaseRepositoryInstance;
+	const handleRemove = () => {
+		firebaseRepository.removeCustomers(rowsRemove);
+		return setCallData(!callData);
+	};
 	return (
 		<Toolbar
 			sx={{
@@ -187,10 +195,9 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 				></Typography>
 			)}
 			{numSelected > 0 ? (
-				<Tooltip title="Delete">
+				<Tooltip title="Delete" onClick={handleRemove}>
 					<IconButton>
 						<DeleteIcon />
-						createSortHandler{" "}
 					</IconButton>
 				</Tooltip>
 			) : (
@@ -210,7 +217,8 @@ export default function CustomerTable() {
 	const [selected, setSelected] = React.useState<readonly string[]>([]);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
-	const { CUSTOMERS } = UseCustomer();
+	const { CUSTOMERS, callData, setCallData } = UseCustomer();
+
 	const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
@@ -219,19 +227,19 @@ export default function CustomerTable() {
 
 	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.checked) {
-			const newSelected = CUSTOMERS.map((n) => n.name);
+			const newSelected = CUSTOMERS.map((n) => String(n.docId));
 			setSelected(newSelected);
 			return;
 		}
 		setSelected([]);
 	};
 
-	const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-		const selectedIndex = selected.indexOf(name);
+	const handleClick = (event: React.MouseEvent<unknown>, name: string, docId: string) => {
+		const selectedIndex = selected.indexOf(docId);
 		let newSelected: readonly string[] = [];
 
 		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name);
+			newSelected = newSelected.concat(selected, docId);
 		} else if (selectedIndex === 0) {
 			newSelected = newSelected.concat(selected.slice(1));
 		} else if (selectedIndex === selected.length - 1) {
@@ -255,12 +263,17 @@ export default function CustomerTable() {
 		setPage(0);
 	};
 
-	const isSelected = (name: string) => selected.indexOf(name) !== -1;
+	const isSelected = (docId: string) => selected.indexOf(docId) !== -1;
 
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
-				<EnhancedTableToolbar numSelected={selected.length} />
+				<EnhancedTableToolbar
+					numSelected={selected.length}
+					rowsRemove={selected}
+					callData={callData}
+					setCallData={setCallData}
+				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
 						<EnhancedTableHead
@@ -275,13 +288,13 @@ export default function CustomerTable() {
 							{stableSort(CUSTOMERS, getComparator(order, orderBy))
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row, index) => {
-									const isItemSelected = isSelected(String(row.name));
+									const isItemSelected = isSelected(String(row.docId));
 									const labelId = `enhanced-table-checkbox-${index}`;
 
 									return (
 										<TableRow
 											hover
-											onClick={(event) => handleClick(event, String(row.name))}
+											onClick={(event) => handleClick(event, String(row.name), String(row.docId))}
 											role="checkbox"
 											aria-checked={isItemSelected}
 											tabIndex={-1}
@@ -301,9 +314,13 @@ export default function CustomerTable() {
 												{row.name}
 											</TableCell>
 											<TableCell align="right">{row.email}</TableCell>
-											<TableCell align="right">{row.phone}</TableCell>
-											<TableCell align="right">{row.address}</TableCell>
-											<TableCell align="right">{row.country}</TableCell>
+											<TableCell align="right">{row.phone ? row.phone : "Don't update"}</TableCell>
+											<TableCell align="right">
+												{row.address ? row.address : "Don't update"}
+											</TableCell>
+											<TableCell align="right">
+												{row.country ? row.country : "Don't update"}
+											</TableCell>
 										</TableRow>
 									);
 								})}

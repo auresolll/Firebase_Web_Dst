@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import * as React from "react";
 import NewCustomer from "../components/_NewCustomer";
 import CustomerTable from "../components/_TableCustomers";
+import UseCustomer from "../hooks/useCustomer";
 import firebaseAuthInstance from "../services/firebaseAuth";
 import firebaseRepositoryInstance from "../services/firebaseRepository";
 import { ActionType } from "../states/actions";
@@ -17,6 +18,7 @@ const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 	const [openError, setOpenError] = React.useState(false);
 	const firebaseAuth = firebaseAuthInstance;
 	const firebaseRepository = firebaseRepositoryInstance;
+	const { fetchCustomers } = UseCustomer();
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
@@ -24,8 +26,9 @@ const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 		try {
 			const invalidAuth = await firebaseAuth.createAccount(email, password);
 			if (invalidAuth.user.uid) {
-				firebaseRepository.createCustomer(state.Customer, invalidAuth.user.uid);
+				await firebaseRepository.createCustomer(state.Customer, invalidAuth.user.uid);
 				setErrorMess("");
+				fetchCustomers();
 				setOpenError(false);
 				setOpen(false);
 			}

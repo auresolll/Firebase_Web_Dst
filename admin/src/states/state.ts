@@ -3,12 +3,14 @@ export interface IInitialState {
 }
 
 export interface ICustomer {
+	docId?: string;
 	email: string;
 	name: string;
 	password: string;
 	address: string;
 	phone: string;
 	country: string;
+	timestamp?: string;
 }
 
 export const initialState: IInitialState = {

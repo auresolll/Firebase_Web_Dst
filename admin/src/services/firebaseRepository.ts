@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { CATEGORIES, USERS } from "../constants/utils";
+import {
+	collection,
+	deleteDoc,
+	doc,
+	getDocs,
+	limit,
+	orderBy,
+	query,
+	setDoc,
+	startAfter,
+} from "firebase/firestore";
+import { CATEGORIES, PRODUCTS, USERS } from "../constants/utils";
 import { ICustomer } from "../states/state";
 import Firebase from "./firebase";
 
@@ -12,6 +22,8 @@ class FirebaseRepository extends Firebase {
 	public createCustomer = async (customer: ICustomer, docId: string) => {
 		const { email, name, address } = customer;
 		const usersColRef = collection(this.store, USERS);
+		const timestamp = new Date();
+
 		return setDoc(doc(usersColRef, docId), {
 			name,
 			country: "VN",
@@ -19,7 +31,7 @@ class FirebaseRepository extends Firebase {
 			email,
 			photoURL:
 				"https://scontent.fsgn13-4.fna.fbcdn.net/v/t39.30808-1/327271301_680861220487729_1480706414865291410_n.jpg?stp=dst-jpg_p200x200&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_ohc=DuBLRnLEI58AX-BeQKS&_nc_ht=scontent.fsgn13-4.fna&oh=00_AfDyGFv9GT-C8Xi0hhW2cguwDQnaabpDtlKif5_F03VXUQ&oe=63E23A26",
-			timestamp: new Date(),
+			timestamp,
 		});
 	};
 
@@ -32,15 +44,25 @@ class FirebaseRepository extends Firebase {
 		return usersSnap;
 	};
 
-	// public getProductsWithPagination = async (_start: number, _limit: number) => {
-	// 	const productsColRef = collection(this.store, PRODUCTS);
-	// 	const _query = query(productsColRef, orderBy("timestamp"), startAfter(_start), limit(_limit));
-	// 	const productsSnap = await getDocs(_query);
-	// 	if (productsSnap.size === 0) {
-	// 		console.log("No data available");
-	// 	}
-	// 	return productsSnap;
-	// };
+	public removeCustomer = async (docId: string) => {
+		await deleteDoc(doc(this.store, USERS, docId));
+	};
+
+	public removeCustomers = (array: readonly string[]) => {
+		array.forEach(async (element) => {
+			await deleteDoc(doc(this.store, USERS, element));
+		});
+	};
+
+	public getProductsWithPagination = async (_start: number, _limit: number) => {
+		const productsColRef = collection(this.store, PRODUCTS);
+		const _query = query(productsColRef, orderBy("timestamp"), startAfter(_start), limit(_limit));
+		const productsSnap = await getDocs(_query);
+		if (productsSnap.size === 0) {
+			console.log("No data available");
+		}
+		return productsSnap;
+	};
 
 	public getCategories = async () => {
 		const categoriesColRef = collection(this.store, CATEGORIES);

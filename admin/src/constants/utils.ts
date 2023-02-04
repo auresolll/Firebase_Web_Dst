@@ -10,3 +10,5 @@ export const CATEGORIES = "categories";
 // Slug Type
 export const DRINK = "drink";
 export const FOOD = "food";
+
+export const OWNER = process.env.REACT_APP_FIREBASE_OWNER || "duoclora@gmail.com";
