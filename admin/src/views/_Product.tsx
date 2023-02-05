@@ -52,28 +52,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 	const [images, setImages] = React.useState([]);
 	const maxNumber = 69;
 
-	async function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		setCallbackProducts(!callbackProducts);
-		await firebaseRepositoryInstance.createProduct(state.Product);
-		setOpen({
-			new: false,
-			edit: false,
-		});
-		setImages([]);
-	}
-
-	const handleChangeSearch = (search: string) => {
-		setSearch(search);
-	};
-
-	const handleSetDispatchProduct = (product: IProduct) => {
-		dispatch({
-			type: ActionType.SetProduct,
-			payload: product,
-		});
-	};
-
+	// UI CODE
 	const handleClickOpen = (type: typeDialog) => {
 		setOpen((pre) => {
 			return {
@@ -89,6 +68,23 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 			edit: false,
 		});
 	};
+
+	// LOGIC CODE
+	async function handleSubmit(e: React.FormEvent) {
+		e.preventDefault();
+		await firebaseRepositoryInstance.createProduct(state.Product);
+		setCallbackProducts(!callbackProducts);
+		setOpen({
+			new: false,
+			edit: false,
+		});
+		setImages([]);
+	}
+
+	const handleChangeSearch = (search: string) => {
+		setSearch(search);
+	};
+
 	const handleChangeFilter = (name: string, value: string) => {
 		setFilterObj((prevState) => {
 			return { ...prevState, [name]: value };
@@ -164,6 +160,25 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 		return products;
 	};
 
+	// const handleChangePage = (event: React.ChangeEvent<unknown>, page: number) => {
+	// 	const offset = (page - 1) * 10 + 1;
+	// 	const updatedValues = {
+	// 		start: offset,
+	// 		limit: offset + 10,
+	// 	};
+	// 	setPagination((prevState) => {
+	// 		return { ...prevState, ...updatedValues };
+	// 	});
+	// };
+
+	// DISPATCH CODE
+	const handleSetDispatchProduct = (product: IProduct) => {
+		dispatch({
+			type: ActionType.SetProduct,
+			payload: product,
+		});
+	};
+
 	const handleChangeDispatchProduct = (key: string, value: string | Date) => {
 		dispatch({
 			type: ActionType.AddProduct,
@@ -171,17 +186,6 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 				key,
 				value,
 			},
-		});
-	};
-
-	const handleChangePage = (event: React.ChangeEvent<unknown>, page: number) => {
-		const offset = (page - 1) * 10 + 1;
-		const updatedValues = {
-			start: offset,
-			limit: offset + 10,
-		};
-		setPagination((prevState) => {
-			return { ...prevState, ...updatedValues };
 		});
 	};
 
@@ -238,143 +242,6 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 							>
 								New Product
 							</Button>
-							<ModifyProduct open={open.new} handleClose={handleClose}>
-								<form onSubmit={handleSubmit}>
-									<Stack gap={2} flexDirection="column" padding={3}>
-										<Box display={"flex"} flexDirection={"row"} gap={2}>
-											<Box display={"flex"} flexDirection={"column"} gap={1}>
-												<label>Full Name</label>
-												<TextField
-													required
-													id="filled-required"
-													placeholder="Pepsi"
-													variant="outlined"
-													size="small"
-													onChange={(e) => handleChangeDispatchProduct("title", e.target.value)}
-												/>
-											</Box>
-											<Box display={"flex"} flexDirection={"column"} gap={1}>
-												<label>Cost</label>
-												<TextField
-													required
-													type={"cost"}
-													id="filled-required"
-													placeholder="20.000 VND"
-													variant="outlined"
-													size="small"
-													onChange={(e) => handleChangeDispatchProduct("cost", e.target.value)}
-												/>
-											</Box>
-										</Box>
-										<Box display={"flex"} flexDirection={"row"} gap={2}>
-											<Box display={"flex"} flexDirection={"column"} gap={1}>
-												<label>Desc</label>
-												<TextField
-													required
-													id="filled-required"
-													type={"text"}
-													placeholder="Lorem ipsum is placeholder text commonly used in the graphic"
-													variant="outlined"
-													size="small"
-													onChange={(e) => handleChangeDispatchProduct("desc", e.target.value)}
-												/>
-											</Box>
-											<Box display={"flex"} flexDirection={"column"} gap={1}>
-												<label>Sale</label>
-												<TextField
-													required
-													id="filled-required"
-													type={"number"}
-													placeholder="0%"
-													defaultValue={0}
-													variant="outlined"
-													size="small"
-													onChange={(e) => handleChangeDispatchProduct("sale", e.target.value)}
-												/>
-											</Box>
-										</Box>
-										<Box display={"flex"} flexDirection={"row"} gap={2}>
-											<Box display={"flex"} flexDirection={"column"} gap={1}>
-												<label>Category</label>
-												<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
-													<Select
-														labelId="demo-simple-select-label"
-														id="demo-simple-select"
-														label="Category"
-														required
-														onChange={(e) =>
-															handleChangeDispatchProduct("category", e.target.value as string)
-														}
-													>
-														{newCATEGORIES.map((val) => (
-															<MenuItem value={val}>{val}</MenuItem>
-														))}
-													</Select>
-												</FormControl>
-											</Box>
-											<Box display={"flex"} flexDirection={"column"} gap={1}>
-												<label>Type</label>
-												<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
-													<Select
-														labelId="demo-simple-select-label"
-														id="demo-simple-select"
-														label="Type"
-														required
-														onChange={(e) =>
-															handleChangeDispatchProduct("type", e.target.value as string)
-														}
-													>
-														<MenuItem value="Food">Food</MenuItem>
-														<MenuItem value="Drink">Drink</MenuItem>
-													</Select>
-												</FormControl>
-											</Box>
-										</Box>
-										<ImageUploading
-											multiple
-											value={images}
-											onChange={onChange}
-											maxNumber={maxNumber}
-											dataURLKey="data_url"
-										>
-											{({
-												imageList,
-												onImageUpload,
-												onImageRemoveAll,
-												onImageRemove,
-												onImageUpdate,
-												dragProps,
-											}) => (
-												// write your building UI
-												<div className="upload__image-wrapper">
-													{imageList.length <= 0 && (
-														<Button variant="outlined" onClick={onImageUpload} {...dragProps}>
-															Click to upload image
-														</Button>
-													)}
-													{imageList.map((image, index) => (
-														<div key={index} className="image-item">
-															<img src={image["data_url"]} alt="" width="100" />
-															<div className="image-item__btn-wrapper">
-																<Button onClick={() => onImageUpdate(index)}>Update</Button>
-																<Button onClick={() => onImageRemove(index)}>Remove</Button>
-															</div>
-														</div>
-													))}
-												</div>
-											)}
-										</ImageUploading>
-										<Button
-											type="submit"
-											variant="contained"
-											startIcon={<AddIcon />}
-											className="inner-section-header-btn"
-										>
-											Save
-										</Button>
-									</Stack>
-								</form>
-							</ModifyProduct>
 						</div>
 					</div>
 
@@ -385,6 +252,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 						searchField={search}
 						onSearch={handleChangeSearch}
 					/>
+
 					<div className="inner-section-product-list">
 						{filterProducts.length > 0 &&
 							filterProducts.map((val: IProduct, index: number) => (
@@ -393,10 +261,11 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 										<img
 											src={val.thumbnail || require("../images/form.png")}
 											onClick={() => {
+												// Dispatch Product to state reducer to use for Edit modify component
 												handleSetDispatchProduct(val);
 												handleClickOpen("edit");
 											}}
-											alt=""
+											alt={val.title}
 										/>
 										<h3>{val.title}</h3>
 										<p>
@@ -409,6 +278,144 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 								</>
 							))}
 					</div>
+
+					<ModifyProduct open={open.new} handleClose={handleClose}>
+						<form onSubmit={handleSubmit}>
+							<Stack gap={2} flexDirection="column" padding={3}>
+								<Box display={"flex"} flexDirection={"row"} gap={2}>
+									<Box display={"flex"} flexDirection={"column"} gap={1}>
+										<label>Full Name</label>
+										<TextField
+											required
+											id="filled-required"
+											placeholder="Pepsi"
+											variant="outlined"
+											size="small"
+											onChange={(e) => handleChangeDispatchProduct("title", e.target.value)}
+										/>
+									</Box>
+									<Box display={"flex"} flexDirection={"column"} gap={1}>
+										<label>Cost</label>
+										<TextField
+											required
+											type={"cost"}
+											id="filled-required"
+											placeholder="20.000 VND"
+											variant="outlined"
+											size="small"
+											onChange={(e) => handleChangeDispatchProduct("cost", e.target.value)}
+										/>
+									</Box>
+								</Box>
+								<Box display={"flex"} flexDirection={"row"} gap={2}>
+									<Box display={"flex"} flexDirection={"column"} gap={1}>
+										<label>Desc</label>
+										<TextField
+											required
+											id="filled-required"
+											type={"text"}
+											placeholder="Lorem ipsum is placeholder text commonly used in the graphic"
+											variant="outlined"
+											size="small"
+											onChange={(e) => handleChangeDispatchProduct("desc", e.target.value)}
+										/>
+									</Box>
+									<Box display={"flex"} flexDirection={"column"} gap={1}>
+										<label>Sale</label>
+										<TextField
+											required
+											id="filled-required"
+											type={"number"}
+											placeholder="0%"
+											defaultValue={0}
+											variant="outlined"
+											size="small"
+											onChange={(e) => handleChangeDispatchProduct("sale", e.target.value)}
+										/>
+									</Box>
+								</Box>
+								<Box display={"flex"} flexDirection={"row"} gap={2}>
+									<Box display={"flex"} flexDirection={"column"} gap={1}>
+										<label>Category</label>
+										<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
+											<Select
+												labelId="demo-simple-select-label"
+												id="demo-simple-select"
+												label="Category"
+												required
+												onChange={(e) =>
+													handleChangeDispatchProduct("category", e.target.value as string)
+												}
+											>
+												{newCATEGORIES.map((val) => (
+													<MenuItem value={val}>{val}</MenuItem>
+												))}
+											</Select>
+										</FormControl>
+									</Box>
+									<Box display={"flex"} flexDirection={"column"} gap={1}>
+										<label>Type</label>
+										<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
+											<Select
+												labelId="demo-simple-select-label"
+												id="demo-simple-select"
+												label="Type"
+												required
+												onChange={(e) =>
+													handleChangeDispatchProduct("type", e.target.value as string)
+												}
+											>
+												<MenuItem value="Food">Food</MenuItem>
+												<MenuItem value="Drink">Drink</MenuItem>
+											</Select>
+										</FormControl>
+									</Box>
+								</Box>
+								<ImageUploading
+									multiple
+									value={images}
+									onChange={onChange}
+									maxNumber={maxNumber}
+									dataURLKey="data_url"
+								>
+									{({
+										imageList,
+										onImageUpload,
+										onImageRemoveAll,
+										onImageRemove,
+										onImageUpdate,
+										dragProps,
+									}) => (
+										// write your building UI
+										<div className="upload__image-wrapper">
+											{imageList.length <= 0 && (
+												<Button variant="outlined" onClick={onImageUpload} {...dragProps}>
+													Click to upload image
+												</Button>
+											)}
+											{imageList.map((image, index) => (
+												<div key={index} className="image-item">
+													<img src={image["data_url"]} alt="" width="100" />
+													<div className="image-item__btn-wrapper">
+														<Button onClick={() => onImageUpdate(index)}>Update</Button>
+														<Button onClick={() => onImageRemove(index)}>Remove</Button>
+													</div>
+												</div>
+											))}
+										</div>
+									)}
+								</ImageUploading>
+								<Button
+									type="submit"
+									variant="contained"
+									startIcon={<AddIcon />}
+									className="inner-section-header-btn"
+								>
+									Save
+								</Button>
+							</Stack>
+						</form>
+					</ModifyProduct>
 					<ModifyProduct open={open.edit} handleClose={handleClose}>
 						<form onSubmit={handleSubmit}>
 							<Stack gap={2} flexDirection="column" padding={3}>
@@ -521,12 +528,11 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 												<img src={state.Product.thumbnail || ""} alt="" width="100" />
 											)}
 											<Divider sx={{ margin: 2 }} />
-											{imageList.length <= 0 && (
+											{imageList.length === 0 && (
 												<Button variant="outlined" onClick={onImageUpload} {...dragProps}>
 													Click to upload image
 												</Button>
 											)}
-
 											{imageList.map((image, index) => (
 												<div key={index} className="image-item">
 													<img src={image["data_url"]} alt="" width="100" />
