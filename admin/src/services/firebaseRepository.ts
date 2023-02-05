@@ -1,3 +1,5 @@
+import { where } from "firebase/firestore";
+import { PRODUCTS } from "./../constants/routes";
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 import {
 	collection,
@@ -10,8 +12,8 @@ import {
 	setDoc,
 	startAfter,
 } from "firebase/firestore";
-import { CATEGORIES, PRODUCTS, USERS } from "../constants/utils";
-import { ICustomer } from "../states/state";
+import { CATEGORIES, TYPE, USERS } from "../constants/utils";
+import { ICustomer, IProduct } from "../states/state";
 import Firebase from "./firebase";
 
 class FirebaseRepository extends Firebase {
@@ -73,15 +75,32 @@ class FirebaseRepository extends Firebase {
 		return categoriesSnap;
 	};
 
-	// public getProductsWithSlug = async (slug: string) => {
-	// 	const productsColRef = collection(this.store, PRODUCTS);
-	// 	const q = query(productsColRef, where(TYPE, "==", `${slug}`));
-	// 	const productsSnap = await getDocs(q);
-	// 	if (productsSnap.size === 0) {
-	// 		console.log("No data available");
-	// 	}
-	// 	return productsSnap;
-	// };
+	public getProductsWithSlug = async (slug: string) => {
+		const productsColRef = collection(this.store, PRODUCTS);
+		const q = query(productsColRef, where(TYPE, "==", `${slug}`));
+		const productsSnap = await getDocs(q);
+		if (productsSnap.size === 0) {
+			console.log("No data available");
+		}
+		return productsSnap;
+	};
+
+	public createProduct = async (product: IProduct) => {
+		const { title, category, cost, desc, rating, sale, thumbnail, type } = product;
+		const productsColRef = collection(this.store, PRODUCTS);
+		const timestamp = new Date();
+		return setDoc(doc(productsColRef), {
+			title,
+			category,
+			cost,
+			desc,
+			rating,
+			sale,
+			thumbnail,
+			type,
+			timestamp,
+		});
+	};
 }
 const firebaseRepositoryInstance = new FirebaseRepository();
 

@@ -20,6 +20,7 @@ export interface IProduct {
 
 const UseProduct = () => {
 	const [PRODUCTS, setPRODUCTS] = React.useState<IProduct[]>([]);
+	const [callbackProducts, setCallbackProducts] = React.useState<boolean>(true);
 	const [pagination, setPagination] = React.useState<IPagination>({
 		start: 0,
 		limit: 3,
@@ -42,11 +43,13 @@ const UseProduct = () => {
 		};
 		const startFetch = setTimeout(fetchProducts, 100);
 		return () => clearTimeout(startFetch);
-	}, [pagination.start, pagination.limit]);
+	}, [pagination.start, pagination.limit, callbackProducts]);
 	return {
 		PRODUCTS,
 		pagination,
 		setPagination,
+		callbackProducts,
+		setCallbackProducts,
 	};
 };
 

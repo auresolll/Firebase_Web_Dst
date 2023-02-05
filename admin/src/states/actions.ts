@@ -1,8 +1,9 @@
-import { ICustomer } from "./state";
+import { IProduct } from "./state";
 
 export enum ActionType {
 	AddCustomer,
 	AddProduct,
+	SetProduct,
 }
 
 export interface IAddCustomer {
@@ -15,7 +16,15 @@ export interface IAddCustomer {
 
 export interface IAddProduct {
 	type: ActionType.AddProduct;
-	payload: ICustomer;
+	payload: {
+		key: string;
+		value: string | Date;
+	};
 }
 
-export type IAction = IAddCustomer | IAddProduct;
+export interface ISetProduct {
+	type: ActionType.SetProduct;
+	payload: IProduct;
+}
+
+export type IAction = IAddCustomer | IAddProduct | ISetProduct;

@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import * as React from "react";
 import UseCategories from "../hooks/useCategories";
+import SearchComponent from "./_Search";
 
 export const FILTER_RATING_OPTIONS = ["1", "2", "3", "4"];
 
@@ -28,30 +29,18 @@ type Anchor = "top" | "left" | "bottom" | "right";
 
 interface IProductFilterSideBarProps {
 	searchField: string;
+	newCATEGORIES: never[];
 	onFilter: (name: string, value: string) => void;
 	onCleanFilter: () => void;
 	onSearch: (search: string) => void;
 }
 const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> = (props) => {
+	const { newCATEGORIES } = props;
 	const anchor: Anchor = "right";
 	const [state, setState] = React.useState({
 		right: false,
 	});
-	const { CATEGORIES } = UseCategories();
-	const [newCATEGORIES, setNewCATEGORIES] = React.useState([]);
 
-	React.useEffect(() => {
-		let isChecked = true;
-		if (isChecked && CATEGORIES.length > 0) {
-			const result = CATEGORIES.map((category) => Object.values(category))
-				.reduce((a, b) => a.concat(b))
-				.reduce((a, b) => a.concat(b));
-			setNewCATEGORIES(result);
-		}
-		return () => {
-			isChecked = false;
-		};
-	}, [CATEGORIES]);
 	const toggleDrawer =
 		(anchor: string, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
 			if (
@@ -69,11 +58,11 @@ const ProductFilterSideBar: React.FunctionComponent<IProductFilterSideBarProps> 
 		<>
 			<React.Fragment key={anchor}>
 				<Stack flexDirection={"row"} justifyContent={"end"}>
+					<SearchComponent search={props.searchField} onSearch={props.onSearch} />
 					<Button disableRipple color="inherit" onClick={toggleDrawer(anchor, true)}>
 						<h5 className="filter-btn">Filters&nbsp;</h5>
 						<FilterListIcon />
 					</Button>
-					{/* <Search search={props.searchField} onSearch={props.onSearch} /> */}
 				</Stack>
 				<Drawer
 					anchor={anchor}

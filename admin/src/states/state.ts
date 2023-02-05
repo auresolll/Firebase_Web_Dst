@@ -1,5 +1,6 @@
 export interface IInitialState {
 	Customer: ICustomer;
+	Product: IProduct;
 }
 
 export interface ICustomer {
@@ -13,6 +14,19 @@ export interface ICustomer {
 	timestamp?: string;
 }
 
+export interface IProduct {
+	docId?: string;
+	title: string;
+	category: string;
+	type: string;
+	sale: number;
+	cost: string;
+	desc: string;
+	thumbnail: string;
+	timestamp?: Date;
+	rating: number;
+}
+
 export const initialState: IInitialState = {
 	Customer: {
 		email: "",
@@ -21,5 +35,16 @@ export const initialState: IInitialState = {
 		address: "",
 		phone: "",
 		country: "",
+	},
+
+	Product: {
+		title: "",
+		category: "",
+		type: "",
+		sale: 0,
+		cost: "",
+		desc: "",
+		thumbnail: "",
+		rating: 0,
 	},
 };

@@ -31,10 +31,10 @@ function App() {
 						<div className="inner-side">
 							<Header />
 						</div>
-						<div className="inner-content">
+						<main className="inner-content">
 							<Nav />
 							<Outlet />
-						</div>
+						</main>
 					</div>
 				</div>
 			</div>

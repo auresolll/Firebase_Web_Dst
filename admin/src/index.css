@@ -56,9 +56,12 @@ a {
 
 .inner-content {
 	max-width: 100%;
-	padding: 0 2em;
 	max-width: calc(1349px - 279px - 10%);
 	width: 100%;
+}
+
+main {
+	margin: 0 2em;
 }
 
 .inner-bar-status {
@@ -210,6 +213,10 @@ a {
 	gap: 0.5em;
 }
 
+.inner-section-header-product .css-14lo706 {
+	display: none !important;
+}
+
 .filter-btn,
 .font-semibold {
 	padding: 0 !important;
@@ -218,6 +225,13 @@ a {
 
 .clearfix {
 	overflow-y: auto;
+}
+
+/* CUSTOMER */
+.inner-section-header-search-customer {
+	display: flex;
+	margin-bottom: 1em;
+	justify-content: flex-end;
 }
 
 @media only screen and (max-width: 1024px) {

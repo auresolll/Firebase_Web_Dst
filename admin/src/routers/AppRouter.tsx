@@ -1,7 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
-import { APP, CUSTOMERS, DASHBOARD, LOGIN, PRODUCTS } from "../constants/routes";
+import { ANALYTICS, APP, CUSTOMERS, DASHBOARD, LOGIN, PRODUCTS } from "../constants/routes";
+import Analytic from "../views/_Analytic";
 import Customer from "../views/_Customer";
 import Dashboard from "../views/_Dashboard";
 import Login from "../views/_Login";
@@ -15,6 +16,7 @@ const AppRouter = createBrowserRouter([
 			{ path: DASHBOARD, element: <Dashboard /> },
 			{ path: CUSTOMERS, element: <Customer /> },
 			{ path: PRODUCTS, element: <Product /> },
+			{ path: ANALYTICS, element: <Analytic /> },
 
 			// { path: PROFILE, element: <Profile /> },
 		],

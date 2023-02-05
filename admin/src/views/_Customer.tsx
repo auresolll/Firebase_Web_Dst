@@ -2,6 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
 import * as React from "react";
 import NewCustomer from "../components/_NewCustomer";
+import SearchComponent from "../components/_Search";
 import CustomerTable from "../components/_TableCustomers";
 import UseCustomer from "../hooks/useCustomer";
 import firebaseAuthInstance from "../services/firebaseAuth";
@@ -13,6 +14,7 @@ interface ICustomerProps {}
 
 const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 	const { state, dispatch } = useMyContext();
+	const [search, setSearch] = React.useState<string>("");
 	const [open, setOpen] = React.useState(false);
 	const [errorMess, setErrorMess] = React.useState<string>("");
 	const [openError, setOpenError] = React.useState(false);
@@ -49,6 +51,10 @@ const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 		});
 	};
 
+	const handleChangeSearch = (search: string) => {
+		setSearch(search);
+	};
+
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -59,7 +65,7 @@ const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 
 	return (
 		<>
-			<main>
+			<div>
 				<div className="inner-section">
 					<div className="inner-section-header">
 						<h1 className="inner-section-header-title">Customer</h1>
@@ -83,9 +89,12 @@ const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 							/>
 						</div>
 					</div>
+					<div className="inner-section-header-search-customer">
+						<SearchComponent search={search} onSearch={handleChangeSearch} />
+					</div>
 					<CustomerTable />
 				</div>
-			</main>
+			</div>
 		</>
 	);
 };
