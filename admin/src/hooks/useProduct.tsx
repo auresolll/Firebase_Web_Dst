@@ -35,9 +35,12 @@ const UseProduct = () => {
 
 			products.then(async (val) => {
 				const result = await val.docs.map((el) => {
-					Object(el.data())["docId"] = el.id;
-					return el.data();
+					const newData = Object.assign(el.data(), {
+						docId: el.id,
+					});
+					return newData;
 				});
+
 				setPRODUCTS(result as unknown as IProduct[]);
 			});
 		};

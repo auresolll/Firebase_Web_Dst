@@ -202,8 +202,11 @@ main {
 	border-radius: 9px;
 }
 .inner-section-product-item img {
-	width: 100%;
+	height: 250px;
 	object-fit: contain;
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
 }
 
 .inner-section-product-item p {
@@ -225,6 +228,19 @@ main {
 
 .clearfix {
 	overflow-y: auto;
+}
+
+.upload-img {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	height: 250px;
+	width: 250px;
+	object-fit: contain;
+}
+
+.image-item__btn-wrapper {
+	text-align: center;
 }
 
 /* CUSTOMER */
@@ -251,6 +267,10 @@ main {
 	}
 }
 
+.upload__image-wrapper-center {
+	text-align: center;
+	margin: 2em 0;
+}
 @media only screen and (max-width: 700px) {
 	.inner-content-header {
 		justify-content: space-between;

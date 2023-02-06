@@ -11,4 +11,6 @@ export const CATEGORIES = "categories";
 export const DRINK = "drink";
 export const FOOD = "food";
 
+export const EDIT = "edit";
+export const NEW = "New";
 export const OWNER = process.env.REACT_APP_FIREBASE_OWNER || "duoclora@gmail.com";

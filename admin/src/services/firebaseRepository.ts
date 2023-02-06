@@ -1,5 +1,6 @@
-import { where } from "firebase/firestore";
+import { updateDoc, where } from "firebase/firestore";
 import { PRODUCTS } from "./../constants/routes";
+import { IProduct } from "./../states/state";
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 import {
 	collection,
@@ -13,7 +14,7 @@ import {
 	startAfter,
 } from "firebase/firestore";
 import { CATEGORIES, TYPE, USERS } from "../constants/utils";
-import { ICustomer, IProduct } from "../states/state";
+import { ICustomer } from "../states/state";
 import Firebase from "./firebase";
 
 class FirebaseRepository extends Firebase {
@@ -58,7 +59,7 @@ class FirebaseRepository extends Firebase {
 
 	public getProductsWithPagination = async (_start: number, _limit: number) => {
 		const productsColRef = collection(this.store, PRODUCTS);
-		const _query = query(productsColRef, orderBy("timestamp"), startAfter(_start), limit(_limit));
+		const _query = query(productsColRef, orderBy("title"), startAfter(_start), limit(_limit));
 		const productsSnap = await getDocs(_query);
 		if (productsSnap.size === 0) {
 			console.log("No data available");
@@ -100,6 +101,27 @@ class FirebaseRepository extends Firebase {
 			type,
 			timestamp,
 		});
+	};
+
+	public modifyProduct = async (product: IProduct) => {
+		const { docId, title, category, cost, desc, rating, sale, thumbnail, type } = product;
+		const productsColRef = collection(this.store, PRODUCTS);
+		const timestamp = new Date();
+		return updateDoc(doc(productsColRef, docId), {
+			title,
+			category,
+			cost,
+			desc,
+			rating,
+			sale,
+			thumbnail,
+			type,
+			timestamp,
+		});
+	};
+
+	public removeProduct = async (docId: string) => {
+		await deleteDoc(doc(this.store, PRODUCTS, docId));
 	};
 }
 const firebaseRepositoryInstance = new FirebaseRepository();

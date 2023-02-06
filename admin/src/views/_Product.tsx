@@ -1,22 +1,14 @@
+/* eslint-disable react/jsx-pascal-case */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import AddIcon from "@mui/icons-material/Add";
-import {
-	Box,
-	Button,
-	Divider,
-	FormControl,
-	MenuItem,
-	Rating,
-	Select,
-	Stack,
-	TextField,
-} from "@mui/material";
+import { Button, Rating } from "@mui/material";
 
 import * as React from "react";
-import ImageUploading, { ImageListType } from "react-images-uploading";
+import { ImageListType } from "react-images-uploading";
+import ChildrenCRUD_Product from "../components/_ChildrenCURD_Product";
 import ProductFilterSideBar from "../components/_FilterSideBar";
-import ModifyProduct from "../components/_ModifyProduct";
+import { EDIT } from "../constants/utils";
 import { formatVND } from "../helpers/utils";
 import UseCategories from "../hooks/useCategories";
 import UseProduct from "../hooks/useProduct";
@@ -35,8 +27,10 @@ interface ObjectFilter {
 
 export type typeDialog = "new" | "edit";
 const Product: React.FunctionComponent<IProductProps> = (props) => {
-	const { dispatch, state } = useMyContext();
+	const { state, dispatch } = useMyContext();
 	const { PRODUCTS, setPagination, callbackProducts, setCallbackProducts } = UseProduct();
+	const { CATEGORIES } = UseCategories();
+	const [newCATEGORIES, setNewCATEGORIES] = React.useState([]);
 	const [filterObj, setFilterObj] = React.useState<ObjectFilter>({
 		category: "",
 		cost: "",
@@ -47,8 +41,6 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 		new: false,
 		edit: false,
 	});
-	const { CATEGORIES } = UseCategories();
-	const [newCATEGORIES, setNewCATEGORIES] = React.useState([]);
 	const [images, setImages] = React.useState([]);
 	const maxNumber = 69;
 
@@ -70,9 +62,13 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 	};
 
 	// LOGIC CODE
-	async function handleSubmit(e: React.FormEvent) {
+	async function handleSubmit(e: React.FormEvent, operator: string) {
 		e.preventDefault();
-		await firebaseRepositoryInstance.createProduct(state.Product);
+		if (operator === EDIT) {
+			await firebaseRepositoryInstance.modifyProduct(state.Product);
+		} else {
+			await firebaseRepositoryInstance.createProduct(state.Product);
+		}
 		setCallbackProducts(!callbackProducts);
 		setOpen({
 			new: false,
@@ -80,6 +76,16 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 		});
 		setImages([]);
 	}
+
+	const handleRemoveProduct = async (docId: string) => {
+		await firebaseRepositoryInstance.removeProduct(docId);
+		setCallbackProducts(!callbackProducts);
+		setOpen({
+			new: false,
+			edit: false,
+		});
+		setImages([]);
+	};
 
 	const handleChangeSearch = (search: string) => {
 		setSearch(search);
@@ -263,8 +269,10 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 											onClick={() => {
 												// Dispatch Product to state reducer to use for Edit modify component
 												handleSetDispatchProduct(val);
+												setImages([]);
 												handleClickOpen("edit");
 											}}
+											loading="lazy"
 											alt={val.title}
 										/>
 										<h3>{val.title}</h3>
@@ -278,293 +286,21 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 								</>
 							))}
 					</div>
-
-					<ModifyProduct open={open.new} handleClose={handleClose}>
-						<form onSubmit={handleSubmit}>
-							<Stack gap={2} flexDirection="column" padding={3}>
-								<Box display={"flex"} flexDirection={"row"} gap={2}>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Full Name</label>
-										<TextField
-											required
-											id="filled-required"
-											placeholder="Pepsi"
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("title", e.target.value)}
-										/>
-									</Box>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Cost</label>
-										<TextField
-											required
-											type={"cost"}
-											id="filled-required"
-											placeholder="20.000 VND"
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("cost", e.target.value)}
-										/>
-									</Box>
-								</Box>
-								<Box display={"flex"} flexDirection={"row"} gap={2}>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Desc</label>
-										<TextField
-											required
-											id="filled-required"
-											type={"text"}
-											placeholder="Lorem ipsum is placeholder text commonly used in the graphic"
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("desc", e.target.value)}
-										/>
-									</Box>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Sale</label>
-										<TextField
-											required
-											id="filled-required"
-											type={"number"}
-											placeholder="0%"
-											defaultValue={0}
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("sale", e.target.value)}
-										/>
-									</Box>
-								</Box>
-								<Box display={"flex"} flexDirection={"row"} gap={2}>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Category</label>
-										<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
-											<Select
-												labelId="demo-simple-select-label"
-												id="demo-simple-select"
-												label="Category"
-												required
-												onChange={(e) =>
-													handleChangeDispatchProduct("category", e.target.value as string)
-												}
-											>
-												{newCATEGORIES.map((val) => (
-													<MenuItem value={val}>{val}</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-									</Box>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Type</label>
-										<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
-											<Select
-												labelId="demo-simple-select-label"
-												id="demo-simple-select"
-												label="Type"
-												required
-												onChange={(e) =>
-													handleChangeDispatchProduct("type", e.target.value as string)
-												}
-											>
-												<MenuItem value="Food">Food</MenuItem>
-												<MenuItem value="Drink">Drink</MenuItem>
-											</Select>
-										</FormControl>
-									</Box>
-								</Box>
-								<ImageUploading
-									multiple
-									value={images}
-									onChange={onChange}
-									maxNumber={maxNumber}
-									dataURLKey="data_url"
-								>
-									{({
-										imageList,
-										onImageUpload,
-										onImageRemoveAll,
-										onImageRemove,
-										onImageUpdate,
-										dragProps,
-									}) => (
-										// write your building UI
-										<div className="upload__image-wrapper">
-											{imageList.length <= 0 && (
-												<Button variant="outlined" onClick={onImageUpload} {...dragProps}>
-													Click to upload image
-												</Button>
-											)}
-											{imageList.map((image, index) => (
-												<div key={index} className="image-item">
-													<img src={image["data_url"]} alt="" width="100" />
-													<div className="image-item__btn-wrapper">
-														<Button onClick={() => onImageUpdate(index)}>Update</Button>
-														<Button onClick={() => onImageRemove(index)}>Remove</Button>
-													</div>
-												</div>
-											))}
-										</div>
-									)}
-								</ImageUploading>
-								<Button
-									type="submit"
-									variant="contained"
-									startIcon={<AddIcon />}
-									className="inner-section-header-btn"
-								>
-									Save
-								</Button>
-							</Stack>
-						</form>
-					</ModifyProduct>
-					<ModifyProduct open={open.edit} handleClose={handleClose}>
-						<form onSubmit={handleSubmit}>
-							<Stack gap={2} flexDirection="column" padding={3}>
-								<Box display={"flex"} flexDirection={"row"} gap={2}>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Full Name</label>
-										<TextField
-											required
-											id="filled-required"
-											placeholder="Pepsi"
-											defaultValue={state.Product.title}
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("title", e.target.value)}
-										/>
-									</Box>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Cost</label>
-										<TextField
-											required
-											type={"cost"}
-											defaultValue={state.Product.cost}
-											id="filled-required"
-											placeholder="20.000 VND"
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("cost", e.target.value)}
-										/>
-									</Box>
-								</Box>
-								<Box display={"flex"} flexDirection={"row"} gap={2}>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Desc</label>
-										<TextField
-											required
-											id="filled-required"
-											type={"text"}
-											defaultValue={state.Product.desc}
-											placeholder="Lorem ipsum is placeholder text commonly used in the graphic"
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("desc", e.target.value)}
-										/>
-									</Box>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Sale</label>
-										<TextField
-											required
-											id="filled-required"
-											type={"number"}
-											defaultValue={state.Product.sale}
-											placeholder="0%"
-											variant="outlined"
-											size="small"
-											onChange={(e) => handleChangeDispatchProduct("sale", e.target.value)}
-										/>
-									</Box>
-								</Box>
-								<Box display={"flex"} flexDirection={"row"} gap={2}>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Category</label>
-										<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
-											<Select
-												labelId="demo-simple-select-label"
-												id="demo-simple-select"
-												label="Category"
-												required
-												defaultValue=""
-												onChange={(e) =>
-													handleChangeDispatchProduct("category", e.target.value as string)
-												}
-											>
-												{newCATEGORIES.map((val) => (
-													<MenuItem value={val}>{val}</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-									</Box>
-									<Box display={"flex"} flexDirection={"column"} gap={1}>
-										<label>Type</label>
-										<FormControl size="small" sx={{ maxWidth: "235px", minWidth: "235px" }}>
-											<Select
-												labelId="demo-simple-select-label"
-												id="demo-simple-select"
-												label="Type"
-												required
-												defaultValue=""
-												onChange={(e) =>
-													handleChangeDispatchProduct("type", e.target.value as string)
-												}
-											>
-												<MenuItem value="Food">Food</MenuItem>
-												<MenuItem value="Drink">Drink</MenuItem>
-											</Select>
-										</FormControl>
-									</Box>
-								</Box>
-								<ImageUploading
-									multiple
-									value={images}
-									onChange={onChange}
-									maxNumber={maxNumber}
-									dataURLKey="data_url"
-								>
-									{({ imageList, onImageUpload, onImageRemove, onImageUpdate, dragProps }) => (
-										// write your building UI
-
-										<div className="upload__image-wrapper">
-											{imageList.length === 0 && (
-												<img src={state.Product.thumbnail || ""} alt="" width="100" />
-											)}
-											<Divider sx={{ margin: 2 }} />
-											{imageList.length === 0 && (
-												<Button variant="outlined" onClick={onImageUpload} {...dragProps}>
-													Click to upload image
-												</Button>
-											)}
-											{imageList.map((image, index) => (
-												<div key={index} className="image-item">
-													<img src={image["data_url"]} alt="" width="100" />
-													<div className="image-item__btn-wrapper">
-														<Button onClick={() => onImageUpdate(index)}>Update</Button>
-														<Button
-															onClick={() => {
-																handleChangeDispatchProduct("thumbnail", "");
-																onImageRemove(index);
-															}}
-														>
-															Remove
-														</Button>
-													</div>
-												</div>
-											))}
-										</div>
-									)}
-								</ImageUploading>
-								<Button
-									type="submit"
-									variant="contained"
-									startIcon={<AddIcon />}
-									className="inner-section-header-btn"
-								>
-									Save
-								</Button>
-							</Stack>
-						</form>
-					</ModifyProduct>
 				</div>
 			</div>
+			<ChildrenCRUD_Product
+				open={open}
+				state={state}
+				newCATEGORIES={newCATEGORIES}
+				images={images}
+				maxNumber={maxNumber}
+				onChange={onChange}
+				handleClose={handleClose}
+				handleRemoveProduct={handleRemoveProduct}
+				handleSetDispatchProduct={handleSetDispatchProduct}
+				handleSubmit={handleSubmit}
+				handleChangeDispatchProduct={handleChangeDispatchProduct}
+			/>
 		</>
 	);
 };
