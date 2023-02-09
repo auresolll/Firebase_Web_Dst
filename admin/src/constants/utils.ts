@@ -6,6 +6,7 @@ export const TYPE = "type";
 export const PRODUCTS = "products";
 export const USERS = "users";
 export const CATEGORIES = "categories";
+export const ORDERS = "orders";
 
 // Slug Type
 export const DRINK = "drink";

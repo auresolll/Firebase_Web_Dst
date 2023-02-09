@@ -92,7 +92,7 @@ const Customer: React.FunctionComponent<ICustomerProps> = (props) => {
 					<div className="inner-section-header-search-customer">
 						<SearchComponent search={search} onSearch={handleChangeSearch} />
 					</div>
-					<CustomerTable />
+					<CustomerTable search={search} />
 				</div>
 			</div>
 		</>

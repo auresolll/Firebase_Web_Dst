@@ -1,5 +1,13 @@
-import { updateDoc, where } from "firebase/firestore";
+import {
+	DocumentData,
+	endAt,
+	getCountFromServer,
+	startAt,
+	updateDoc,
+	where,
+} from "firebase/firestore";
 import { PRODUCTS } from "./../constants/routes";
+import { ORDERS } from "./../constants/utils";
 import { IProduct } from "./../states/state";
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 import {
@@ -16,6 +24,7 @@ import {
 import { CATEGORIES, TYPE, USERS } from "../constants/utils";
 import { ICustomer } from "../states/state";
 import Firebase from "./firebase";
+import { Dayjs } from "dayjs";
 
 class FirebaseRepository extends Firebase {
 	constructor() {
@@ -123,7 +132,76 @@ class FirebaseRepository extends Firebase {
 	public removeProduct = async (docId: string) => {
 		await deleteDoc(doc(this.store, PRODUCTS, docId));
 	};
+
+	public getTotalProductsSeller = async () => {
+		const orderColRef = collection(this.store, ORDERS);
+		const query_ = query(orderColRef);
+		const snapshot = await getCountFromServer(query_);
+		const orderDocsSnap = await getDocs(orderColRef);
+		orderDocsSnap.forEach((val) => {
+			snapshot.data().count += val.data().extra.length;
+		});
+		return {
+			count: snapshot.data().count,
+			collection: ORDERS,
+		};
+	};
+
+	public getTotalCustomers = async () => {
+		const customersColRef = collection(this.store, USERS);
+		const query_ = query(customersColRef);
+		const snapshot = await getCountFromServer(query_);
+		return {
+			count: snapshot.data().count,
+			collection: USERS,
+		};
+	};
+
+	public getTotalCostEarn = async () => {
+		const ordersColRef = collection(this.store, ORDERS);
+		const ordersSnap = await getDocs(ordersColRef);
+		const initialValue = 0;
+		const calculatesCostEarn = ordersSnap.docs.map((val) => val.data());
+		const total = calculatesCostEarn.reduce((accumulator, currentValue) => {
+			accumulator = accumulator + Number(currentValue.cost) * Number(currentValue.quantity);
+			if (currentValue.extra.length > 0) {
+				currentValue.extra.filter(
+					(a: DocumentData, b: number) => (accumulator += Number(a.cost) * Number(a.quantity))
+				);
+			}
+			return accumulator;
+		}, initialValue);
+		return {
+			count: total,
+			collection: ORDERS,
+		};
+	};
+
+	public getEarnWithTime = async (from: Date, to: Date) => {
+		const ordersColRef = collection(this.store, ORDERS);
+		const query_ = query(
+			ordersColRef,
+			orderBy("timestamp"),
+			where("timestamp", ">", new Date(from.toString())),
+			where("timestamp", "<", new Date(to.toString()))
+		);
+		const ordersSnap = await getDocs(query_);
+		return ordersSnap.docs.map((el) => {
+			return el.data();
+		});
+	};
+
+	public getEarnWithNowDay = async () => {
+		const ordersColRef = collection(this.store, ORDERS);
+		const startOfToday = new Date();
+		startOfToday.setUTCHours(0, 0, 0, 0);
+		const query_ = query(ordersColRef, orderBy("timestamp"), where("timestamp", ">", startOfToday));
+		const ordersSnap = await getDocs(query_);
+		const data = ordersSnap.docs.map((el) => {
+			return el.data();
+		});
+		return data;
+	};
 }
 const firebaseRepositoryInstance = new FirebaseRepository();
-
 export default firebaseRepositoryInstance;

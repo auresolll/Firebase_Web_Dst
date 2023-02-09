@@ -156,7 +156,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
 
 		if (rating) {
 			products = products.filter((val: { rating: any }) => {
-				const isRating = Number(val.rating) <= Number(rating);
+				const isRating = Number(val.rating) === Number(rating);
 				if (isRating) {
 					return val;
 				}

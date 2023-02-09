@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
@@ -50,8 +51,8 @@ function getComparator<Key extends keyof any>(
 		: (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-	const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number, search: string) {
+	let stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
 	stabilizedThis.sort((a, b) => {
 		const order = comparator(a[0], b[0]);
 		if (order !== 0) {
@@ -59,6 +60,12 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 		}
 		return a[1] - b[1];
 	});
+
+	if (search) {
+		stabilizedThis = stabilizedThis.filter(
+			(el: any) => el[0].name.toLocaleLowerCase().indexOf(search.toLocaleLowerCase()) !== -1
+		);
+	}
 	return stabilizedThis.map((el) => el[0]);
 }
 
@@ -211,7 +218,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 	);
 }
 
-export default function CustomerTable() {
+interface ICustomerTableProps {
+	search: string;
+}
+export default function CustomerTable(props: ICustomerTableProps) {
+	const { search } = props;
 	const [order, setOrder] = React.useState<Order>("asc");
 	const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
 	const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -285,7 +296,7 @@ export default function CustomerTable() {
 							rowCount={CUSTOMERS.length}
 						/>
 						<TableBody>
-							{stableSort(CUSTOMERS, getComparator(order, orderBy))
+							{stableSort(CUSTOMERS, getComparator(order, orderBy), search)
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row, index) => {
 									const isItemSelected = isSelected(String(row.docId));

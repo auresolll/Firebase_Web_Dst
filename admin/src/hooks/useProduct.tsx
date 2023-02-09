@@ -34,7 +34,7 @@ const UseProduct = () => {
 			);
 
 			products.then(async (val) => {
-				const result = await val.docs.map((el) => {
+				const result = val.docs.map((el) => {
 					const newData = Object.assign(el.data(), {
 						docId: el.id,
 					});
@@ -44,7 +44,7 @@ const UseProduct = () => {
 				setPRODUCTS(result as unknown as IProduct[]);
 			});
 		};
-		const startFetch = setTimeout(fetchProducts, 100);
+		const startFetch = setTimeout(fetchProducts, 3000);
 		return () => clearTimeout(startFetch);
 	}, [pagination.start, pagination.limit, callbackProducts]);
 	return {

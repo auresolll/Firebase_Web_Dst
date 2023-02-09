@@ -303,7 +303,7 @@ const ChildrenCRUD_Product: React.FunctionComponent<IChildrenCRUD_ProductProps> 
 											Click to upload image
 										</Button>
 									)}
-									{imageList.length === 0 && (
+									{imageList.length === 0 && state.Product.thumbnail && (
 										<div className="upload__image-wrapper-center">
 											<img
 												src={state.Product.thumbnail || ""}
@@ -313,22 +313,23 @@ const ChildrenCRUD_Product: React.FunctionComponent<IChildrenCRUD_ProductProps> 
 											/>
 										</div>
 									)}
-									{imageList.map((image, index) => (
-										<div key={index} className="image-item">
-											<img src={image["data_url"]} loading="lazy" className="upload-img" alt="" />
-											<div className="image-item__btn-wrapper">
-												<Button onClick={() => onImageUpdate(index)}>Update</Button>
-												<Button
-													onClick={() => {
-														handleChangeDispatchProduct("thumbnail", "");
-														onImageRemove(index);
-													}}
-												>
-													Remove
-												</Button>
+									{imageList.length > 0 &&
+										imageList.map((image, index) => (
+											<div key={index} className="image-item">
+												<img src={image["data_url"]} loading="lazy" className="upload-img" alt="" />
+												<div className="image-item__btn-wrapper">
+													<Button onClick={() => onImageUpdate(index)}>Update</Button>
+													<Button
+														onClick={() => {
+															handleChangeDispatchProduct("thumbnail", "");
+															onImageRemove(index);
+														}}
+													>
+														Remove
+													</Button>
+												</div>
 											</div>
-										</div>
-									))}
+										))}
 								</div>
 							)}
 						</ImageUploading>
