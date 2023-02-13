@@ -25,7 +25,6 @@ const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) =>
 	const [stateDraw, setState] = React.useState({
 		right: false,
 	});
-
 	const [DRINK_PRODUCTS, setDRINK_PRODUCTS] = React.useState<DocumentData[]>([]);
 	const toggleDrawer =
 		(anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {

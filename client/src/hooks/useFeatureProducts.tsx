@@ -25,7 +25,7 @@ const UseFeatureProducts = () => {
 				setPRODUCTS(result as unknown as IProduct[]);
 			});
 		};
-		const startFetch = setTimeout(fetchProducts, 100);
+		const startFetch = setTimeout(fetchProducts, 1000);
 		return () => clearTimeout(startFetch);
 	}, [pagination.start, pagination.limit]);
 	return {

@@ -1,4 +1,4 @@
-import { Baskets, Customer } from "../states/state";
+import { Baskets, Customer, Status } from "../states/state";
 
 export const displayActionMessage = (msg: string, status = "info") => {
 	const div = document.createElement("div");
@@ -38,9 +38,19 @@ export const formatVND = (number: number) => {
 
 export const customerToStore = () => {
 	const setCustomer = (customer: Customer) => {
-		console.log(customer);
-
 		return localStorage.setItem("customer", JSON.stringify(customer));
+	};
+
+	const resetCustomer = () => {
+		return setCustomer({
+			displayName: "",
+			email: "",
+			phoneNumber: "",
+			photoURL: "",
+			providerId: "",
+			status: Status.signOut,
+			uid: "",
+		});
 	};
 
 	const getCustomer = () => {
@@ -50,6 +60,7 @@ export const customerToStore = () => {
 	return {
 		setCustomer,
 		getCustomer,
+		resetCustomer,
 	};
 };
 

@@ -1,11 +1,12 @@
 import { SUCCESS } from "./../constants/utils";
-import { displayActionMessage } from "./../helpers/utils";
+import { customerToStore, displayActionMessage } from "./../helpers/utils";
 import { ActionType, StoreActions } from "./actions";
-import { StoreState } from "./state";
+import { Status, StoreState } from "./state";
 
 export function storeReducer(state: StoreState, action: StoreActions): StoreState {
 	switch (action.type) {
 		case ActionType.AddCustomer:
+			customerToStore().setCustomer(action.payload);
 			return {
 				...state,
 				customer: action.payload,
@@ -24,23 +25,6 @@ export function storeReducer(state: StoreState, action: StoreActions): StoreStat
 					],
 				},
 			};
-
-		// case ActionType.AddExtra:
-		// 	return {
-		// 		...state,
-		// 		baskets: {
-		// 			...state.baskets,
-		// 			basket: {
-		// 				...state.baskets.basket.filter((b) => {
-		// 					if (b.product.timestamp === action.payload.productTimestamp) {
-		// 						b.extra = action.payload.extra;
-		// 					}
-		// 					return b;
-		// 				}),
-		// 			},
-		// 		},
-		// 	};
-
 		case ActionType.AddInfoOrder:
 			return {
 				...state,
@@ -102,6 +86,20 @@ export function storeReducer(state: StoreState, action: StoreActions): StoreStat
 				baskets: {
 					...state.baskets,
 					basket: [...(state.baskets.basket = [])],
+				},
+			};
+
+		case ActionType.ResetCustomer:
+			return {
+				...state,
+				customer: {
+					...state.customer,
+					email: "",
+					phoneNumber: "",
+					photoURL: "",
+					providerId: "",
+					status: Status.signOut,
+					uid: "",
 				},
 			};
 

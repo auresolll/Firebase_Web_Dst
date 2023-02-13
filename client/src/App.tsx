@@ -11,17 +11,16 @@ import { initialStoreState } from "./states/state";
 function App() {
 	const [state, dispatch] = useReducer(storeReducer, initialStoreState);
 	React.useEffect(() => {
-		let isChecked = true;
-		if (isChecked && state.customer.uid === "") {
+		const data = customerToStore().getCustomer();
+		if (state.customer.uid === "" && data.uid !== "") {
 			dispatch({
 				type: ActionType.AddCustomer,
 				payload: customerToStore().getCustomer(),
 			});
 		}
-		return () => {
-			isChecked = false;
-		};
 	}, []);
+	console.log(state);
+
 	return (
 		<StoreContext.Provider value={{ state, dispatch }}>
 			<div className="container">

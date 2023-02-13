@@ -49,6 +49,7 @@ const Basket: React.FunctionComponent<IBasketProps> = (props) => {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
 	React.useEffect(() => {
 		let isChecked = true;
 		if (isChecked && state.baskets.basket.length > 0) {

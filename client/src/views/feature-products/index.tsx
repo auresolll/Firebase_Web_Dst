@@ -25,6 +25,7 @@ const Feature: React.FunctionComponent<IFeatureProps> = (props) => {
 	const handleChangeSearch = (search: string) => {
 		setSearch(search);
 	};
+
 	const handleChangeFilter = (name: string, value: string) => {
 		setFilterObj((prevState) => {
 			return { ...prevState, [name]: value };
@@ -41,6 +42,7 @@ const Feature: React.FunctionComponent<IFeatureProps> = (props) => {
 			return { ...prevState, ...cleanValue };
 		});
 	};
+
 	const applyFilter = (
 		array: IProduct[],
 		search: string,
@@ -100,7 +102,7 @@ const Feature: React.FunctionComponent<IFeatureProps> = (props) => {
 		return products;
 	};
 
-	const handleChangePage = (event: React.ChangeEvent<unknown>, page: number) => {
+	const handleChangePagination = (event: React.ChangeEvent<unknown>, page: number) => {
 		const offset = (page - 1) * 10 + 1;
 		const updatedValues = {
 			start: offset,
@@ -150,7 +152,7 @@ const Feature: React.FunctionComponent<IFeatureProps> = (props) => {
 						</div>
 					</div>
 					<Stack spacing={2} justifyContent={"center"} alignItems="center" marginY={"3em"}>
-						<Pagination count={5} onChange={handleChangePage} />
+						<Pagination count={5} onChange={handleChangePagination} />
 					</Stack>
 				</section>
 			</main>

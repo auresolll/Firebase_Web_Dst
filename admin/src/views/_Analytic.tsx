@@ -26,38 +26,7 @@ const Analytic: React.FunctionComponent<IAnalyticProps> = (props) => {
 		const invalidRangeTime = (from as Date) <= (to as Date);
 		if (isNull === false && invalidRangeTime) {
 			const dataChart = await firebaseRepositoryInstance.getEarnWithTime(from as Date, to as Date);
-			const initDataTime = new Map();
-			dataChart
-				.map((el) => {
-					el.timestamp = convert(el.timestamp.toDate());
-					initDataTime.set(el.timestamp, {
-						date: el.timestamp,
-						count: 0,
-					});
-					return el;
-				})
-				.reduce((a, b) => {
-					const instant_pre = initDataTime.get(a.timestamp);
-					const instant_next = initDataTime.get(b.timestamp);
-					if (a.timestamp === b.timestamp) {
-						return (instant_pre.count += Number(a.quantity) + Number(b.quantity));
-					}
-					instant_pre.count = Number(a.quantity);
-					return (instant_next.count = Number(b.quantity));
-				});
-
-			if (initDataTime.size > 0) {
-				setDateChart([]);
-				initDataTime.forEach((el) => {
-					setDateChart((pre) => [
-						...pre,
-						{
-							date: el.date,
-							count: el.count,
-						},
-					]);
-				});
-			}
+			setDateChart(dataChart);
 		}
 	};
 

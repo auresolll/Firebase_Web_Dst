@@ -6,18 +6,23 @@ export enum ActionType {
 	OnAuthStateChanged,
 	AddBasket,
 	AddExtra,
+	AddInfoOrder,
 	ResetBasket,
 	ResetExtra,
+	ResetCustomer,
 	ChangeQuantityProduct,
 	ChangeQuantityExtra,
 	DeleteProduct,
 	DeleteExtra,
-	AddInfoOrder,
 }
 
 export interface AddCustomer {
 	type: ActionType.AddCustomer;
 	payload: Customer;
+}
+
+export interface ResetCustomer {
+	type: ActionType.ResetCustomer;
 }
 
 export interface AddInfoOrder {
@@ -96,4 +101,5 @@ export type StoreActions =
 	| ChangeQuantityExtra
 	| DeleteProduct
 	| DeleteExtra
-	| AddInfoOrder;
+	| AddInfoOrder
+	| ResetCustomer;

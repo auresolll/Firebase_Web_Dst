@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { error } from "console";
 import { UserCredential } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { AUTH_WRONG_USER } from "../constants/errors";
@@ -21,27 +20,10 @@ const useAuth = () => {
 		authInstance.signOut();
 		return authInstance.onAuthStateChanged().catch(async (error) => {
 			await dispatch({
-				type: ActionType.AddCustomer,
-				payload: {
-					displayName: "",
-					email: "",
-					phoneNumber: "",
-					photoURL: "",
-					providerId: "",
-					status: Status.signOut,
-					uid: "",
-				},
+				type: ActionType.ResetCustomer,
 			});
 
-			customerToStore().setCustomer({
-				displayName: "",
-				email: "",
-				phoneNumber: "",
-				photoURL: "",
-				providerId: "",
-				status: Status.signOut,
-				uid: "",
-			});
+			customerToStore().resetCustomer();
 			return displayActionMessage(Status.signOut, SUCCESS);
 		});
 	};
@@ -62,15 +44,7 @@ const useAuth = () => {
 						uid: cb.user.uid,
 					},
 				});
-				customerToStore().setCustomer({
-					displayName: cb.user.displayName,
-					email: cb.user.email,
-					phoneNumber: cb.user.phoneNumber,
-					photoURL: cb.user.photoURL as string | undefined,
-					providerId: cb.user.providerId,
-					status: Status.signIn,
-					uid: cb.user.uid,
-				});
+
 				return displayActionMessage(Status.signIn, SUCCESS);
 			})
 			.catch(async (error: any) => {
@@ -93,15 +67,6 @@ const useAuth = () => {
 						dbInstance.createCustomer(cb);
 						navigate(HOME);
 						displayActionMessage(Status.newAccount, SUCCESS);
-						customerToStore().setCustomer({
-							displayName: cb.displayName,
-							email: cb.email,
-							phoneNumber: cb.phoneNumber,
-							photoURL: cb.photoURL as string | undefined,
-							providerId: cb.providerId,
-							status: Status.signIn,
-							uid: cb.uid,
-						});
 						return dbInstance.createCustomer(cb);
 					});
 				}
@@ -123,15 +88,6 @@ const useAuth = () => {
 						status: Status.signIn,
 						uid: cb.user.uid,
 					},
-				});
-				customerToStore().setCustomer({
-					displayName: cb.user.displayName,
-					email: cb.user.email,
-					phoneNumber: cb.user.phoneNumber,
-					photoURL: cb.user.photoURL as string | undefined,
-					providerId: cb.user.providerId,
-					status: Status.signIn,
-					uid: cb.user.uid,
 				});
 				navigate(HOME);
 				return displayActionMessage(Status.signIn, SUCCESS);
