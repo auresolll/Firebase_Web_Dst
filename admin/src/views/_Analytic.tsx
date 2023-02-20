@@ -5,7 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DocumentData } from "firebase/firestore";
 import * as React from "react";
 import BarChartAnalytic from "../components/_BarChartAnalytic";
-import { convert, formatVND } from "../helpers/utils";
+import { formatVND } from "../helpers/utils";
 import firebaseRepositoryInstance from "../services/firebaseRepository";
 
 interface IAnalyticProps {}
@@ -47,7 +47,7 @@ const Analytic: React.FunctionComponent<IAnalyticProps> = (props) => {
 			<div>
 				<div className="inner-section">
 					<div className="inner-section-header">
-						<h1>Analytics</h1>
+						<h1>Hi, Welcome back</h1>
 					</div>
 					<div className="inner-section-analytic-count">
 						<div className="inner-section-analytic-count-item">

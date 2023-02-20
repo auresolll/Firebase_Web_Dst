@@ -5,6 +5,8 @@ import { firebaseRepositoryInstance } from "../services/firebase";
 
 const UseFeatureProducts = () => {
 	const [PRODUCTS, setPRODUCTS] = React.useState<IProduct[]>([]);
+	console.log(`[USE FEATURE PRODUCTS] Size Products: ${PRODUCTS.length}`);
+
 	const [pagination, setPagination] = React.useState<IPagination>({
 		start: 0,
 		limit: 3,
@@ -17,15 +19,15 @@ const UseFeatureProducts = () => {
 				pagination.limit
 			);
 
-			products.then(async (val) => {
-				const result: DocumentData[] = await val.docs.map((el) => {
+			products.then((val) => {
+				const result: DocumentData[] = val.docs.map((el) => {
 					Object(el.data())["doc"] = el.id;
 					return el.data();
 				});
 				setPRODUCTS(result as unknown as IProduct[]);
 			});
 		};
-		const startFetch = setTimeout(fetchProducts, 1000);
+		const startFetch = setTimeout(fetchProducts, 300);
 		return () => clearTimeout(startFetch);
 	}, [pagination.start, pagination.limit]);
 	return {

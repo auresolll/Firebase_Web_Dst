@@ -1,3 +1,4 @@
+import { DocumentData } from "@firebase/firestore-types";
 import { FirebaseApp, initializeApp } from "firebase/app";
 import {
 	Auth,
@@ -14,6 +15,7 @@ import {
 	collection,
 	doc,
 	Firestore,
+	getDoc,
 	getDocs,
 	getFirestore,
 	limit,
@@ -21,9 +23,11 @@ import {
 	query,
 	setDoc,
 	startAfter,
+	updateDoc,
 	where,
 } from "firebase/firestore";
-import { CATEGORIES, PRODUCTS, TYPE, USERS } from "../constants/utils";
+import { getMessaging, getToken, Messaging, onMessage } from "firebase/messaging";
+import { CATEGORIES, PRODUCTS, TOKENS, TOKEN_CLIENTS_DOCS, TYPE, USERS } from "../constants/utils";
 import { Customer } from "../states/state";
 import firebaseConfig from "./config.firebase";
 
@@ -33,6 +37,7 @@ class Firebase {
 	protected auth: Auth;
 	protected googleProvider: GoogleAuthProvider;
 	protected store: Firestore;
+	public messaging: Messaging;
 
 	constructor() {
 		this.app = initializeApp(firebaseConfig);
@@ -41,8 +46,12 @@ class Firebase {
 		this.auth = getAuth(this.app);
 		this.store = getFirestore(this.app);
 		this.googleProvider = new GoogleAuthProvider();
-
+		this.messaging = getMessaging(this.app);
 		this.googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+	}
+
+	public get getMessaging(): Messaging {
+		return this.messaging;
 	}
 }
 
@@ -159,7 +168,69 @@ class FirebaseRepository extends Firebase {
 	};
 }
 
+class FirebaseMessaging extends Firebase {
+	constructor() {
+		super();
+	}
+
+	public getToken = async () => {
+		return getToken(this.messaging, {
+			vapidKey:
+				"BIAPzcEYM4j5ynfNNiTlajVnfF5gpXLvXJQJ0PMrQhqK_tgHMuAGFSDxTRCxj4NGpaKr__u7jO6wDOO2KczHZPQ",
+		}).then((token: string) => token);
+	};
+
+	public requestPermission = async () => {
+		console.log("Requesting permission...");
+		const permission = await Notification.requestPermission();
+		if (permission === "granted") {
+			const token = await this.getToken();
+			console.log(token);
+			this.sendTokenToServer(token);
+			console.log("Notification permission granted.");
+			return true;
+		}
+		return false;
+	};
+
+	public getTokenToServer = async () => {
+		const tokensColRef = doc(collection(this.store, TOKENS), TOKEN_CLIENTS_DOCS);
+		const tokens = await getDoc(tokensColRef);
+		const result = tokens.data();
+		return result;
+	};
+
+	public sendTokenToServer = async (token: string) => {
+		const tokensColRef = collection(this.store, TOKENS);
+		const _tokens = await this.getTokenToServer();
+		const isExits = this.compareTokenOnSame(token, _tokens);
+		if (isExits === false) return;
+		if (_tokens === undefined) return;
+		return updateDoc(doc(tokensColRef, TOKEN_CLIENTS_DOCS), {
+			tokens: _tokens.tokens,
+		});
+	};
+
+	public compareTokenOnSame = (token: string, list: DocumentData | undefined) => {
+		if (list === undefined) return false;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const isExits = list.tokens.findIndex(
+			(_token: DocumentData) => _token === (token as unknown as DocumentData)
+		);
+		if (isExits >= 0) return false;
+
+		list.tokens.push(token as unknown as DocumentData);
+		return true;
+	};
+
+	public onMessage = () => {
+		return onMessage(this.messaging, (payload) => {
+			console.log("Message received. ", payload);
+		});
+	};
+}
 const firebaseAuthInstance = new FirebaseAuth();
+const firebaseMessagingInstance = new FirebaseMessaging();
 const firebaseRepositoryInstance = new FirebaseRepository();
 
-export { firebaseAuthInstance, firebaseRepositoryInstance };
+export { firebaseAuthInstance, firebaseMessagingInstance, firebaseRepositoryInstance };

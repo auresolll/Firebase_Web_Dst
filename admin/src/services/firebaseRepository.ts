@@ -1,11 +1,4 @@
-import {
-	DocumentData,
-	endAt,
-	getCountFromServer,
-	startAt,
-	updateDoc,
-	where,
-} from "firebase/firestore";
+import { DocumentData, getCountFromServer, updateDoc, where } from "firebase/firestore";
 import { PRODUCTS } from "./../constants/routes";
 import { ORDERS } from "./../constants/utils";
 import { IProduct } from "./../states/state";
@@ -24,7 +17,6 @@ import {
 import { CATEGORIES, TYPE, USERS } from "../constants/utils";
 import { ICustomer } from "../states/state";
 import Firebase from "./firebase";
-import { Dayjs } from "dayjs";
 
 class FirebaseRepository extends Firebase {
 	constructor() {

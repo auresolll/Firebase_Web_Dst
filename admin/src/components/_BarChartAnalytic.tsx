@@ -43,6 +43,8 @@ const BarChartAnalytic: React.FunctionComponent<IBarChartAnalyticProps> = (props
 				});
 
 			if (initDataTime.size > 0) {
+				{
+				}
 				const result: ((prevState: never[]) => never[]) | { date: any; count: any }[] = [];
 				initDataTime.forEach((el) => {
 					result.push({
@@ -76,7 +78,6 @@ const BarChartAnalytic: React.FunctionComponent<IBarChartAnalyticProps> = (props
 				>
 					<CartesianGrid strokeDasharray="3 3" />
 					<XAxis dataKey="date" />
-					<YAxis />
 					<Tooltip />
 					<Legend />
 					<Bar dataKey="count" fill="#82ca9d" />

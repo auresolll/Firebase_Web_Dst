@@ -7,6 +7,8 @@ export const PRODUCTS = "products";
 export const USERS = "users";
 export const CATEGORIES = "categories";
 export const ORDERS = "orders";
+export const TOKENS = "tokens";
+export const TOKEN_ADMIN_FELID = "admins";
 
 // Slug Type
 export const DRINK = "drink";

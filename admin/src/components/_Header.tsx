@@ -20,11 +20,11 @@ const ROUTES = [
 		img: "https://minimal-kit-react.vercel.app/assets/icons/navbar/ic_cart.svg",
 		label: "Products",
 	},
-	{
-		link: ANALYTICS,
-		img: "https://minimal-kit-react.vercel.app/assets/icons/navbar/ic_analytics.svg",
-		label: "Analytics",
-	},
+	// {
+	// 	link: ANALYTICS,
+	// 	img: "https://minimal-kit-react.vercel.app/assets/icons/navbar/ic_analytics.svg",
+	// 	label: "Analytics",
+	// },
 	{
 		link: LOGIN,
 		img: "https://minimal-kit-react.vercel.app/assets/icons/navbar/ic_lock.svg",
@@ -50,8 +50,8 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 				</div>
 				<div className="inner-bar-touch">
 					<ul className="inner-bar-touch-list">
-						{ROUTES.map((route) => (
-							<li key={route.link}>
+						{ROUTES.map((route, index) => (
+							<li key={index}>
 								<NavLink
 									className="inner-bar-item"
 									to={route.link}

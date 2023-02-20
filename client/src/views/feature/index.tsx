@@ -7,6 +7,7 @@ interface IFeatureDemoProps {}
 
 const FeatureDemo: React.FunctionComponent<IFeatureDemoProps> = (props) => {
 	const { PRODUCTS } = UseFeatureProducts();
+	console.log(`[FEATURE DEMO] Size Products: ${PRODUCTS.length}`);
 
 	return (
 		<>

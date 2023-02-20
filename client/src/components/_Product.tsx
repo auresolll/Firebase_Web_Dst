@@ -7,7 +7,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { SIGNIN } from "../constants/router";
 import { IExtra, IProduct } from "../constants/type";
-import { basketToStore, formatVND } from "../helpers/utils";
+import { formatVND } from "../helpers/utils";
 import { firebaseRepositoryInstance } from "../services/firebase";
 import { ActionType } from "../states/actions";
 import { useStore } from "../states/context";
@@ -60,7 +60,7 @@ const FeatureProduct: React.FunctionComponent<IFeatureProductProps> = (props) =>
 	};
 	React.useEffect(() => {
 		const fetchProducts = async () => {
-			const drink = firebaseRepositoryInstance.getProductsWithSlug("drink");
+			const drink = firebaseRepositoryInstance.getProductsWithSlug("Drink");
 			setDRINK_PRODUCTS((await drink).docs.map((val) => val.data()));
 		};
 		const timer = setTimeout(fetchProducts, 1000);

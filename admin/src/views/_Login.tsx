@@ -38,7 +38,6 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
 					<h2>Sign in</h2>
 					<div className="login-section-form">
 						<form onSubmit={handleSubmit}>
-							<img src={require("../images/form.png")} alt="" />
 							<Stack gap={2}>
 								<TextField
 									required

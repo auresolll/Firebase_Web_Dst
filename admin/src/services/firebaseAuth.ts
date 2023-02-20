@@ -5,6 +5,8 @@ import {
 	GoogleAuthProvider,
 	signOut,
 	onAuthStateChanged,
+	deleteUser,
+	User,
 } from "firebase/auth";
 import Firebase from "./firebase";
 
@@ -16,6 +18,10 @@ class FirebaseAuth extends Firebase {
 
 	public createAccount = (email: string, password: string) => {
 		return createUserWithEmailAndPassword(this.auth, email, password);
+	};
+
+	public removeAccount = (user: User) => {
+		return deleteUser(user);
 	};
 
 	public signIn = (email: string, password: string) => {

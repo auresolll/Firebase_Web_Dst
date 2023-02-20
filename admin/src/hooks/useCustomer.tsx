@@ -6,6 +6,7 @@ const UseCustomer = () => {
 	const [CUSTOMERS, setCUSTOMERS] = React.useState<ICustomer[]>([]);
 	const [callData, setCallData] = React.useState<boolean>(true);
 	const firebaseRepository = firebaseRepositoryInstance;
+
 	const fetchCustomers = async () => {
 		const result = await firebaseRepository.getCustomers();
 		const data = result.docs.map((val) => {
