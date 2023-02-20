@@ -4,7 +4,7 @@ const firebaseConfig = {
 	databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
 	projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
 	storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-	messagingSenderId: "3382134",
+	messagingSenderId: "388061356865",
 	appId: process.env.REACT_APP_FIREBASE_APP_ID,
 	measurementId: "G-8MWVEVZ7BX",
 };

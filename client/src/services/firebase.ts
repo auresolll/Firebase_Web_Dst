@@ -27,6 +27,8 @@ import {
 	where,
 } from "firebase/firestore";
 import { getMessaging, getToken, Messaging, onMessage } from "firebase/messaging";
+import * as messagingSw from "firebase/messaging/sw";
+import { onBackgroundMessage } from "firebase/messaging/sw";
 import { CATEGORIES, PRODUCTS, TOKENS, TOKEN_CLIENTS_DOCS, TYPE, USERS } from "../constants/utils";
 import { Customer } from "../states/state";
 import firebaseConfig from "./config.firebase";
@@ -38,7 +40,7 @@ class Firebase {
 	protected googleProvider: GoogleAuthProvider;
 	protected store: Firestore;
 	public messaging: Messaging;
-
+	public messagingSw: messagingSw.Messaging;
 	constructor() {
 		this.app = initializeApp(firebaseConfig);
 
@@ -47,6 +49,7 @@ class Firebase {
 		this.store = getFirestore(this.app);
 		this.googleProvider = new GoogleAuthProvider();
 		this.messaging = getMessaging(this.app);
+		this.messagingSw = messagingSw.getMessaging(this.app);
 		this.googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 	}
 
@@ -203,17 +206,15 @@ class FirebaseMessaging extends Firebase {
 	public sendTokenToServer = async (token: string) => {
 		const tokensColRef = collection(this.store, TOKENS);
 		const _tokens = await this.getTokenToServer();
+		if (_tokens === undefined) return;
 		const isExits = this.compareTokenOnSame(token, _tokens);
 		if (isExits === false) return;
-		if (_tokens === undefined) return;
 		return updateDoc(doc(tokensColRef, TOKEN_CLIENTS_DOCS), {
 			tokens: _tokens.tokens,
 		});
 	};
 
-	public compareTokenOnSame = (token: string, list: DocumentData | undefined) => {
-		if (list === undefined) return false;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public compareTokenOnSame = (token: string, list: DocumentData) => {
 		const isExits = list.tokens.findIndex(
 			(_token: DocumentData) => _token === (token as unknown as DocumentData)
 		);
@@ -228,9 +229,17 @@ class FirebaseMessaging extends Firebase {
 			console.log("Message received. ", payload);
 		});
 	};
+
+	public onBackgroundMessage() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		onBackgroundMessage(this.messagingSw, (payload: any) => {
+			console.log("[firebase-messaging-sw.js] Received background message ", payload);
+		});
+	}
 }
 const firebaseAuthInstance = new FirebaseAuth();
 const firebaseMessagingInstance = new FirebaseMessaging();
 const firebaseRepositoryInstance = new FirebaseRepository();
 
+firebaseMessagingInstance.onMessage();
 export { firebaseAuthInstance, firebaseMessagingInstance, firebaseRepositoryInstance };

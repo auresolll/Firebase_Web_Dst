@@ -5,8 +5,6 @@ import { firebaseRepositoryInstance } from "../services/firebase";
 
 const UseFeatureProducts = () => {
 	const [PRODUCTS, setPRODUCTS] = React.useState<IProduct[]>([]);
-	console.log(`[USE FEATURE PRODUCTS] Size Products: ${PRODUCTS.length}`);
-
 	const [pagination, setPagination] = React.useState<IPagination>({
 		start: 0,
 		limit: 3,
